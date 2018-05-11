@@ -1,0 +1,2 @@
+AttributeError: module 'asyncio' has no attribute 'coroutine'
+    自己创建的python文件名称与系统的模块名称相同导致出现该错误。
