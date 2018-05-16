@@ -37,21 +37,48 @@ ab = {
     'Matsumoto': 'matz@ruby-lang.org',
     'Spammer': 'spammer@hotmail.com'
 }
-
 # 根据 键 输出 值
 print(ab['Swaroop'])
-
 # 根据 键 删除 键值对
 del ab['Spammer']
 print(len(ab))
-
 # 遍历输出
 for name, address in ab.items():
     print('Contact {} at {}'.format(name, address))
-
 # 添加一对键值对
 ab['Guido'] = 'gudio@python.org'
-
 if 'Guido' in ab:
     print(ab['Guido'])
 
+# Set 集合
+bri = set(['brazil', 'russia', 'india'])
+# 判断集合是否包含元素
+print('india' in bri)
+print('usa' in bri)
+# 集合拷贝
+bric = bri.copy()
+bric.add('china')
+# 集合1是否是集合2的父集
+print(bric.issuperset(bri))
+# 删除元素
+bric.remove('russia')
+# 交集
+print(bri & bric)
+# 等价于
+print(bri.intersection(bric))
+
+# 字符串处理
+name = 'Swaroop'
+
+if name.startswith('Swa'):
+    print('Yes, the string starts with "Swa"')
+
+if 'a' in name:
+    print('Yes, it contains the string "a"')
+
+if name.find('war') != -1:
+    print('Yes, it contains the string "war"')
+
+delimiter = '_*_'
+mylist = ['Brazil', 'Russia', 'India', 'China']
+print(delimiter.join(mylist))
