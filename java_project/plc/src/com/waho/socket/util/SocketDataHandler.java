@@ -12,7 +12,7 @@ public abstract class SocketDataHandler {
 
 	public SocketDataHandler nextHandler;
 
-	public static byte cmdType;
+	private byte cmdType;
 
 	public SocketDataHandler getNextHandler() {
 		return nextHandler;
@@ -70,9 +70,17 @@ public abstract class SocketDataHandler {
 
 	}
 
-	public SocketDataHandler(SocketDataHandler nextHandler) {
+	protected SocketDataHandler(SocketDataHandler nextHandler) {
 		super();
 		this.nextHandler = nextHandler;
+	}
+
+	public byte getCmdType() {
+		return cmdType;
+	}
+
+	public void setCmdType(byte cmdType) {
+		this.cmdType = cmdType;
 	}
 	
 	

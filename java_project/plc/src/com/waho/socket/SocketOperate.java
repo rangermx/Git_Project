@@ -6,7 +6,14 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import com.waho.domain.Device;
-import com.waho.socket.util.ControlCmdHandler;
+import com.waho.socket.util.CmdBroadcastHandler;
+import com.waho.socket.util.CmdCommuncateHandler;
+import com.waho.socket.util.CmdControlHandler;
+import com.waho.socket.util.CmdHeartbeatHandler;
+import com.waho.socket.util.CmdMainNodeMsgHandler;
+import com.waho.socket.util.CmdNodeMsgHandler;
+import com.waho.socket.util.CmdReadmacHandler;
+import com.waho.socket.util.CmdUnknownHandler;
 import com.waho.socket.util.SocketDataHandler;
 
 /**
@@ -16,10 +23,31 @@ import com.waho.socket.util.SocketDataHandler;
  * 
  */
 public class SocketOperate extends Thread {
+	
+	private static CmdUnknownHandler CUH;
+	private static CmdNodeMsgHandler CNH;
+	private static CmdMainNodeMsgHandler CNMH;
+	private static CmdBroadcastHandler CBH;
+	private static CmdReadmacHandler CRH;
+	private static CmdHeartbeatHandler CHH;
+	private static CmdCommuncateHandler CMH;
+	private static CmdControlHandler CCH;
 
 	private Socket socket;
-	
+
 	private Device device;
+
+	static {
+		// 责任链设计模式
+		CUH = CmdUnknownHandler.getInstance(null);// 处理未知指令
+		CNH = CmdNodeMsgHandler.getInstance(CUH);// 处理从节点消息
+		CNMH = CmdMainNodeMsgHandler.getInstance(CNH);// 处理主节点消息
+		CBH = CmdBroadcastHandler.getInstance(CNMH);// 处理广播回复
+		CRH = CmdReadmacHandler.getInstance(CBH);// 处理读mac地址回复
+		CHH = CmdHeartbeatHandler.getInstance(CRH);// 处理心跳包
+		CMH = CmdCommuncateHandler.getInstance(CHH);// 处理从节点通讯指令
+		CCH = CmdControlHandler.getInstance(CMH);// 处理主节点控制指令
+	}
 
 	public SocketOperate(Socket socket) {
 		this.socket = socket;
@@ -31,8 +59,6 @@ public class SocketOperate extends Thread {
 		InputStream in = null;
 		OutputStream out = null;
 		int timeCount = 0;
-		// 责任链设计模式
-		ControlCmdHandler cch = new ControlCmdHandler(null);
 		try {
 			in = socket.getInputStream();
 			out = socket.getOutputStream();
@@ -43,13 +69,15 @@ public class SocketOperate extends Thread {
 				if ((length = in.read(temp)) != -1) {
 					timeCount = 0;
 					// 解析责任链，任务开始
-					cch.socketDataHandle(temp, length);
-					System.out.println(temp.toString());
-					out.write(temp);
+					CCH.socketDataHandle(temp, length);
+					if (length > 0) {
+						System.out.write(temp, 0, length);
+						out.write(temp, 0, length);
+					}
 				}
 				// 读用户发送的指令
 				SocketDataHandler.UserMessageHandle(device, out);
-				
+
 				try {
 					sleep(1 * 1000);
 					if (timeCount++ > 10) {
