@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 
 import com.waho.domain.Device;
+import com.waho.socket.state.SocketState;
+import com.waho.socket.state.impl.RegisterState;
 import com.waho.socket.util.CmdBroadcastHandler;
 import com.waho.socket.util.CmdCommuncateHandler;
 import com.waho.socket.util.CmdControlHandler;
@@ -14,7 +17,6 @@ import com.waho.socket.util.CmdMainNodeMsgHandler;
 import com.waho.socket.util.CmdNodeMsgHandler;
 import com.waho.socket.util.CmdReadmacHandler;
 import com.waho.socket.util.CmdUnknownHandler;
-import com.waho.socket.util.SocketDataHandler;
 
 /**
  * 多线程处理socket接收的数据
@@ -23,7 +25,7 @@ import com.waho.socket.util.SocketDataHandler;
  * 
  */
 public class SocketOperate extends Thread {
-	
+
 	private static CmdUnknownHandler CUH;
 	private static CmdNodeMsgHandler CNH;
 	private static CmdMainNodeMsgHandler CNMH;
@@ -32,10 +34,18 @@ public class SocketOperate extends Thread {
 	private static CmdHeartbeatHandler CHH;
 	private static CmdCommuncateHandler CMH;
 	private static CmdControlHandler CCH;
+	
+	private static final int KEEP_ONLINE_TIME = 30;
 
 	private Socket socket;
 
 	private Device device;
+
+	private Thread readThread;
+	
+	private int timeCount = 0;
+	
+	private LinkedList<byte[]> cmdList = new LinkedList<>();
 
 	static {
 		// 责任链设计模式
@@ -55,32 +65,63 @@ public class SocketOperate extends Thread {
 	}
 
 	public void run() {
-
-		InputStream in = null;
+		System.out.println("socket start!");
 		OutputStream out = null;
-		int timeCount = 0;
+		SocketState state = RegisterState.getInstance();
 		try {
-			in = socket.getInputStream();
 			out = socket.getOutputStream();
-			byte[] temp = new byte[1024];
-			int length = 0;
+			this.readThread = new Thread() {
+				public void run() {
+					byte[] temp = new byte[1024];
+					int length = 0;
+					InputStream in = null;
+					try {
+						in = socket.getInputStream();
+						while (!socket.isClosed()) {
+							// 读取客户端发送的信息
+							if ((length = in.read(temp)) != -1) {
+								timeCount = 0;
+								cmdList.addLast(new byte[length]);
+								System.arraycopy(temp, 0, cmdList.getLast(), 0, length);
+							}
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						if (in != null) {
+							try {
+								in.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+
+				}
+
+			};
+			this.readThread.start();
+			byte[] temp;
 			while (!socket.isClosed()) {
-				// 读取客户端发送的信息
-				if ((length = in.read(temp)) != -1) {
-					timeCount = 0;
-					// 解析责任链，任务开始
-					CCH.socketDataHandle(temp, length);
-					if (length > 0) {
-						System.out.write(temp, 0, length);
-						out.write(temp, 0, length);
+				
+				while (!cmdList.isEmpty()) {
+					temp = cmdList.getFirst();
+					if (temp != null) {
+						// 读设备发送的指令
+						state.clientDataHandle(temp, temp.length, CCH);
+						// 处理完数据后从列表中移除
+						cmdList.removeFirst();
+						temp = null;
 					}
 				}
+
 				// 读用户发送的指令
-				SocketDataHandler.UserMessageHandle(device, out);
+				// SocketDataHandler.UserMessageHandle(device, out);
+				state.userMsgHanle(device, out);
 
 				try {
 					sleep(1 * 1000);
-					if (timeCount++ > 10) {
+					if (timeCount++ > KEEP_ONLINE_TIME) {
 						socket.close();
 					}
 				} catch (InterruptedException e) {
@@ -91,15 +132,7 @@ public class SocketOperate extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-
 			System.out.println("socket stop!");
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 			if (out != null) {
 				try {
 					out.close();
@@ -107,6 +140,7 @@ public class SocketOperate extends Thread {
 					e.printStackTrace();
 				}
 			}
+			this.readThread.stop();
 		}
 	}
 }
