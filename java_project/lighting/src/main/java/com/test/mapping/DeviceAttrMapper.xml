@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.DeviceAttrMapper" >
+  <resultMap id="BaseResultMap" type="com.test.domain.DeviceAttr" >
+    <id column="dev_mac" property="devMac" jdbcType="VARCHAR" />
+    <result column="zigbee_finder" property="zigbeeFinder" jdbcType="INTEGER" />
+    <result column="dev_type" property="devType" jdbcType="INTEGER" />
+    <result column="dev_version" property="devVersion" jdbcType="INTEGER" />
+    <result column="dev_ip" property="devIp" jdbcType="VARCHAR" />
+    <result column="param1" property="param1" jdbcType="VARCHAR" />
+    <result column="param2" property="param2" jdbcType="VARCHAR" />
+    <result column="param3" property="param3" jdbcType="VARCHAR" />
+    <result column="param4" property="param4" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dev_mac, zigbee_finder, dev_type, dev_version, dev_ip, param1, param2, param3, param4
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dev_attr_table
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dev_attr_table
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.test.domain.DeviceAttr" >
+    insert into dev_attr_table (dev_mac, zigbee_finder, dev_type, 
+      dev_version, dev_ip, param1, 
+      param2, param3, param4
+      )
+    values (#{devMac,jdbcType=VARCHAR}, #{zigbeeFinder,jdbcType=INTEGER}, #{devType,jdbcType=INTEGER}, 
+      #{devVersion,jdbcType=INTEGER}, #{devIp,jdbcType=VARCHAR}, #{param1,jdbcType=VARCHAR}, 
+      #{param2,jdbcType=VARCHAR}, #{param3,jdbcType=VARCHAR}, #{param4,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.domain.DeviceAttr" >
+    insert into dev_attr_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="devMac != null" >
+        dev_mac,
+      </if>
+      <if test="zigbeeFinder != null" >
+        zigbee_finder,
+      </if>
+      <if test="devType != null" >
+        dev_type,
+      </if>
+      <if test="devVersion != null" >
+        dev_version,
+      </if>
+      <if test="devIp != null" >
+        dev_ip,
+      </if>
+      <if test="param1 != null" >
+        param1,
+      </if>
+      <if test="param2 != null" >
+        param2,
+      </if>
+      <if test="param3 != null" >
+        param3,
+      </if>
+      <if test="param4 != null" >
+        param4,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="devMac != null" >
+        #{devMac,jdbcType=VARCHAR},
+      </if>
+      <if test="zigbeeFinder != null" >
+        #{zigbeeFinder,jdbcType=INTEGER},
+      </if>
+      <if test="devType != null" >
+        #{devType,jdbcType=INTEGER},
+      </if>
+      <if test="devVersion != null" >
+        #{devVersion,jdbcType=INTEGER},
+      </if>
+      <if test="devIp != null" >
+        #{devIp,jdbcType=VARCHAR},
+      </if>
+      <if test="param1 != null" >
+        #{param1,jdbcType=VARCHAR},
+      </if>
+      <if test="param2 != null" >
+        #{param2,jdbcType=VARCHAR},
+      </if>
+      <if test="param3 != null" >
+        #{param3,jdbcType=VARCHAR},
+      </if>
+      <if test="param4 != null" >
+        #{param4,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.domain.DeviceAttr" >
+    update dev_attr_table
+    <set >
+      <if test="zigbeeFinder != null" >
+        zigbee_finder = #{zigbeeFinder,jdbcType=INTEGER},
+      </if>
+      <if test="devType != null" >
+        dev_type = #{devType,jdbcType=INTEGER},
+      </if>
+      <if test="devVersion != null" >
+        dev_version = #{devVersion,jdbcType=INTEGER},
+      </if>
+      <if test="devIp != null" >
+        dev_ip = #{devIp,jdbcType=VARCHAR},
+      </if>
+      <if test="param1 != null" >
+        param1 = #{param1,jdbcType=VARCHAR},
+      </if>
+      <if test="param2 != null" >
+        param2 = #{param2,jdbcType=VARCHAR},
+      </if>
+      <if test="param3 != null" >
+        param3 = #{param3,jdbcType=VARCHAR},
+      </if>
+      <if test="param4 != null" >
+        param4 = #{param4,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.domain.DeviceAttr" >
+    update dev_attr_table
+    set zigbee_finder = #{zigbeeFinder,jdbcType=INTEGER},
+      dev_type = #{devType,jdbcType=INTEGER},
+      dev_version = #{devVersion,jdbcType=INTEGER},
+      dev_ip = #{devIp,jdbcType=VARCHAR},
+      param1 = #{param1,jdbcType=VARCHAR},
+      param2 = #{param2,jdbcType=VARCHAR},
+      param3 = #{param3,jdbcType=VARCHAR},
+      param4 = #{param4,jdbcType=VARCHAR}
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </update>
+</mapper>

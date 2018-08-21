@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.ZigbeeMapper" >
+  <resultMap id="BaseResultMap" type="com.test.domain.Zigbee" >
+    <id column="zigbee_mac" property="zigbeeMac" jdbcType="VARCHAR" />
+    <result column="zigbee_name" property="zigbeeName" jdbcType="VARCHAR" />
+    <result column="zigbee_net" property="zigbeeNet" jdbcType="INTEGER" />
+    <result column="zigbee_bright" property="zigbeeBright" jdbcType="INTEGER" />
+    <result column="zigbee_status" property="zigbeeStatus" jdbcType="INTEGER" />
+    <result column="zigbee_saddr" property="zigbeeSaddr" jdbcType="VARCHAR" />
+    <result column="dev_mac" property="devMac" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    zigbee_mac, zigbee_name, zigbee_net, zigbee_bright, zigbee_status, zigbee_saddr, 
+    dev_mac
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from zigbee_table
+    where zigbee_mac = #{zigbeeMac,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBySAddrAndDevMac" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from zigbee_table
+    where zigbee_saddr = #{sAddr,jdbcType=VARCHAR} AND dev_mac = #{devMac,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBydevMac" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from zigbee_table
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from zigbee_table
+    where zigbee_mac = #{zigbeeMac,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.test.domain.Zigbee" >
+    insert into zigbee_table (zigbee_mac, zigbee_name, zigbee_net, 
+      zigbee_bright, zigbee_status, zigbee_saddr, 
+      dev_mac)
+    values (#{zigbeeMac,jdbcType=VARCHAR}, #{zigbeeName,jdbcType=VARCHAR}, #{zigbeeNet,jdbcType=INTEGER}, 
+      #{zigbeeBright,jdbcType=INTEGER}, #{zigbeeStatus,jdbcType=INTEGER}, #{zigbeeSaddr,jdbcType=VARCHAR}, 
+      #{devMac,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.domain.Zigbee" >
+    insert into zigbee_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="zigbeeMac != null" >
+        zigbee_mac,
+      </if>
+      <if test="zigbeeName != null" >
+        zigbee_name,
+      </if>
+      <if test="zigbeeNet != null" >
+        zigbee_net,
+      </if>
+      <if test="zigbeeBright != null" >
+        zigbee_bright,
+      </if>
+      <if test="zigbeeStatus != null" >
+        zigbee_status,
+      </if>
+      <if test="zigbeeSaddr != null" >
+        zigbee_saddr,
+      </if>
+      <if test="devMac != null" >
+        dev_mac,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="zigbeeMac != null" >
+        #{zigbeeMac,jdbcType=VARCHAR},
+      </if>
+      <if test="zigbeeName != null" >
+        #{zigbeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="zigbeeNet != null" >
+        #{zigbeeNet,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeBright != null" >
+        #{zigbeeBright,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeStatus != null" >
+        #{zigbeeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeSaddr != null" >
+        #{zigbeeSaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="devMac != null" >
+        #{devMac,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.domain.Zigbee" >
+    update zigbee_table
+    <set >
+      <if test="zigbeeName != null" >
+        zigbee_name = #{zigbeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="zigbeeNet != null" >
+        zigbee_net = #{zigbeeNet,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeBright != null" >
+        zigbee_bright = #{zigbeeBright,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeStatus != null" >
+        zigbee_status = #{zigbeeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeSaddr != null" >
+        zigbee_saddr = #{zigbeeSaddr,jdbcType=VARCHAR},
+      </if>
+      <if test="devMac != null" >
+        dev_mac = #{devMac,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where zigbee_mac = #{zigbeeMac,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.domain.Zigbee" >
+    update zigbee_table
+    set zigbee_name = #{zigbeeName,jdbcType=VARCHAR},
+      zigbee_net = #{zigbeeNet,jdbcType=INTEGER},
+      zigbee_bright = #{zigbeeBright,jdbcType=INTEGER},
+      zigbee_status = #{zigbeeStatus,jdbcType=INTEGER},
+      zigbee_saddr = #{zigbeeSaddr,jdbcType=VARCHAR},
+      dev_mac = #{devMac,jdbcType=VARCHAR}
+    where zigbee_mac = #{zigbeeMac,jdbcType=VARCHAR}
+  </update>
+  <update id="updateBydevMacSelectiveWhereOnline" parameterType="com.test.domain.Zigbee" >
+    update zigbee_table
+    <set >
+      <!-- <if test="zigbeeName != null" >
+        zigbee_name = #{zigbeeName,jdbcType=VARCHAR},
+      </if> -->
+      <if test="zigbeeNet != null" >
+        zigbee_net = #{zigbeeNet,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeBright != null" >
+        zigbee_bright = #{zigbeeBright,jdbcType=INTEGER},
+      </if>
+      <if test="zigbeeStatus != null" >
+        zigbee_status = #{zigbeeStatus,jdbcType=INTEGER},
+      </if>
+      <!-- <if test="zigbeeSaddr != null" >
+        zigbee_saddr = #{zigbeeSaddr,jdbcType=VARCHAR},
+      </if> -->
+      <!-- <if test="devMac != null" >
+        dev_mac = #{devMac,jdbcType=VARCHAR},
+      </if> -->
+    </set>
+    where dev_mac = #{devMac,jdbcType=VARCHAR} AND zigbee_net = 1
+  </update>
+</mapper>

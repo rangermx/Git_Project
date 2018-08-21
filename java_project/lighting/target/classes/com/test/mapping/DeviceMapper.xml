@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.dao.DeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.test.domain.Device" >
+    <id column="dev_mac" property="devMac" jdbcType="VARCHAR" />
+    <result column="dev_name" property="devName" jdbcType="VARCHAR" />
+    <result column="dev_net" property="devNet" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="gprs_phone" property="gprsPhone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dev_mac, dev_name, dev_net, userid, gprs_phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from dev_table
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByUserid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from dev_table
+    where userid = #{userid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from dev_table
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.test.domain.Device" >
+    insert into dev_table (dev_mac, dev_name, dev_net, 
+      userid, gprs_phone)
+    values (#{devMac,jdbcType=VARCHAR}, #{devName,jdbcType=VARCHAR}, #{devNet,jdbcType=INTEGER}, 
+      #{userid,jdbcType=INTEGER}, #{gprsPhone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.domain.Device" >
+    insert into dev_table
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="devMac != null" >
+        dev_mac,
+      </if>
+      <if test="devName != null" >
+        dev_name,
+      </if>
+      <if test="devNet != null" >
+        dev_net,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="gprsPhone != null" >
+        gprs_phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="devMac != null" >
+        #{devMac,jdbcType=VARCHAR},
+      </if>
+      <if test="devName != null" >
+        #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="devNet != null" >
+        #{devNet,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="gprsPhone != null" >
+        #{gprsPhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.domain.Device" >
+    update dev_table
+    <set >
+      <if test="devName != null" >
+        dev_name = #{devName,jdbcType=VARCHAR},
+      </if>
+      <if test="devNet != null" >
+        dev_net = #{devNet,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="gprsPhone != null" >
+        gprs_phone = #{gprsPhone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.domain.Device" >
+    update dev_table
+    set dev_name = #{devName,jdbcType=VARCHAR},
+      dev_net = #{devNet,jdbcType=INTEGER},
+      userid = #{userid,jdbcType=INTEGER},
+      gprs_phone = #{gprsPhone,jdbcType=VARCHAR}
+    where dev_mac = #{devMac,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>LightingSystem</title>
+<link rel="stylesheet"
+	href="../layui/css/layui.css">
+<link rel="stylesheet"
+	href="../css/index.css">
+</head>
+
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+		<div id="topNav" class="layui-header">
+			<div class="layui-logo">Waho Lighting System</div>
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+			<ul class="layui-nav layui-layout-left">
+				<li class="layui-nav-item"><a href="javascript:;">Add</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="javascript:;">Centralized controller</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">Group</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">Ploy</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="javascript:;">Delete</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="javascript:;">Centralized controller</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">Group</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">Ploy</a>
+						</dd>
+					</dl></li>
+			</ul>
+			<ul class="layui-nav layui-layout-right">
+				<li class="layui-nav-item"><a href="javascript:;"> <img
+						src="http://t.cn/RCzsdCq" class="layui-nav-img"> {{user.username}}
+				</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="javascript:;" v-on:click="userInfo(user)">User info</a>
+						</dd>
+						<dd>
+							<a href="javascript:;">Security Settings</a>
+						</dd>
+					</dl></li>
+				<li class="layui-nav-item"><a href="javascript:;" v-on:click="exit()">exit</a></li>
+			</ul>
+		</div>
+
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul id="leftNav" class="layui-nav layui-nav-tree" lay-filter="test">
+					<li class="layui-nav-item layui-nav-itemed"><a class=""
+						href="javascript:;">Centralized controller</a>
+						<dl class="layui-nav-child">
+							<dd v-for="dev of devSet">
+								<a href="javascript:;">{{dev.name}}</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="javascript:;">Group</a>
+						<dl class="layui-nav-child">
+                            <dd v-for="group of groupSet">
+								<a href="javascript:;">{{group.name}}</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="javascript:;">Ploy</a>
+						<dl class="layui-nav-child">
+							<dd v-for="ploy of ploySet">
+								<a href="javascript:;">{{ploy.name}}</a>
+							</dd>
+						</dl></li>
+					<li class="layui-nav-item"><a href="javascript:;">Console</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div class="layui-tab" lay-filter="layadmin-layout-tabs">
+				<ul class="layui-tab-title">
+					<li lay-id="console">Console</li>
+					<li lay-id="class" class="layui-this">Centralized controller</li>
+					<li lay-id="33">Group</li>
+					<li lay-id="44">Ploy</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item">
+						<div class="layui-row">
+							<div class="layui-col-xs12 layui-col-md8">
+								<div class="grid-demo grid-demo-bg1">
+									<fieldset class="layui-elem-field layui-field-title"
+										style="margin-top: 10px;">
+										<legend>Console</legend>
+									</fieldset>
+									<form class="layui-form" action=""
+										onkeydown="if(event.keyCode==13)return false;">
+										<div class="layui-form-item layui-form-text">
+											<label class="layui-form-label">receive:</label>
+											<div class="layui-input-block">
+												<textarea id="receiveTA" name="receiveTA" placeholder=""
+													class="layui-textarea"></textarea>
+											</div>
+										</div>
+										<div class="layui-form-item layui-form-text">
+											<label class="layui-form-label">Send:</label>
+											<div class="layui-input-block">
+												<textarea id="sendTA" name="sendTA" placeholder=""
+													class="layui-textarea" lay-verify="required"></textarea>
+											</div>
+										</div>
+										<div class="layui-col-md3 layui-col-md-offset9">
+											<div class="layui-btn-group">
+												<button class="layui-btn layui-btn-lg">Clear</button>
+												<button class="layui-btn layui-btn-lg" lay-submit=""
+													lay-filter="sendcmd">Send</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="layui-col-xs12 layui-col-md4">
+								<div class="grid-demo">
+									<fieldset class="layui-elem-field layui-field-title"
+										style="margin-top: 10px;">
+										<legend>Quick input</legend>
+									</fieldset>
+									<form class="layui-form" action=""
+										onkeydown="if(event.keyCode==13)return false;">
+										<div class="layui-form-item">
+											<div class="layui-input-inline">
+												<input type="text" name="sendTA" lay-verify="required"
+													placeholder="Enter the command" autocomplete="off"
+													class="layui-input">
+											</div>
+											<button class="layui-btn" lay-submit="" lay-filter="sendcmd">Send</button>
+										</div>
+									</form>
+									<form class="layui-form" action=""
+										onkeydown="if(event.keyCode==13)return false;">
+										<div class="layui-form-item">
+											<div class="layui-input-inline">
+												<input type="text" name="sendTA" lay-verify="required"
+													placeholder="Enter the command" autocomplete="off"
+													class="layui-input">
+											</div>
+											<button class="layui-btn" lay-submit="" lay-filter="sendcmd">Send</button>
+										</div>
+									</form>
+									<form class="layui-form" action=""
+										onkeydown="if(event.keyCode==13)return false;">
+										<div class="layui-form-item">
+											<div class="layui-input-inline">
+												<input type="text" name="sendTA" lay-verify="required"
+													placeholder="Enter the command" autocomplete="off"
+													class="layui-input">
+											</div>
+											<button class="layui-btn" lay-submit="" lay-filter="sendcmd">Send</button>
+										</div>
+										<div class="layui-form-item">
+											<button class="layui-btn">+</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item layui-show">
+						<div class="layui-row">
+							<div id="devTab" class="layui-form">
+								<div class="layui-collapse" lay-filter="test">
+									<div v-for="dev of devSet" class="layui-colla-item">
+										<h2 class="layui-colla-title">{{dev.name}}</h2>
+										<div class="layui-colla-content">
+                                            <table class="layui-table" lay-skin="line">
+                                                <colgroup>
+                                                    <col width="150">
+                                                    <col>
+                                                    <col>
+                                                    <col>
+                                                    <col width="140">
+                                                    <col>
+                                                    <col width="120">
+                                                    <col width="110">
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>node name</th>
+                                                        <th>network</th>
+                                                        <th>status</th>
+                                                        <th>brightness</th>
+                                                        <th>temperature</th>
+                                                        <th>humidity</th>
+                                                        <th>switch</th>
+                                                        <th>dimming</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="zigbee of zigbeeSet">
+                                                        <td v-if="zigbee.devMac == dev.mac">
+                                                            <a href="javascript:;" v-on:click="showZigbeeDetail(zigbee)">{{zigbee.name}}</a>
+                                                        </td>
+                                                        <td>
+                                                            <i v-if="zigbee.online == false" class="layui-icon" style="font-size: 20px; color: lightgray;">&#xe617;</i>
+                                                            <i v-if="zigbee.online == true" class="layui-icon" style="font-size: 20px; color: green;">&#xe617;</i>
+                                                        </td>
+                                                        <td>
+                                                            <i v-if="zigbee.workStatus == true" class="layui-icon" style="font-size: 20px; color: orange;">&#xe617;</i>
+                                                            <i v-if="zigbee.workStatus == false" class="layui-icon" style="font-size: 20px; color: lightgray;">&#xe617;</i>
+                                                        </td>
+                                                        <td>{{zigbee.brightness}}%</td>
+                                                        <td>{{(zigbee.temperature != null && zigbee.temperature != undefined) ? zigbee.temperature.toFixed(1) : "N"}}°C | {{(zigbee.temperature != null && zigbee.temperature != undefined) ? (zigbee.temperature * 1.8 + 32).toFixed(1) : "N"}}°F</td>
+                                                        <td>{{zigbee.humidity}}</td>
+                                                        <td>
+                                                            <div class="layui-btn-group">
+                                                                <button class="layui-btn layui-btn-primary layui-btn-sm zigbee-btn-on">ON</button>
+                                                                <button class="layui-btn layui-btn-primary layui-btn-sm">OFF</button>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <select name="interest" lay-filter="aihao">
+                                                                <option value="" selected="">select</option>
+                                                                <option v-for="index of btnRange" v-bind:value="index">{{index}}</option>
+                                                                <!-- <option value="0">50%</option> -->
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item">group</div>
+					<div class="layui-tab-item">ploy</div>
+				</div>
+			</div>
+			<div class="body-item"></div>
+
+		</div>
+
+		<div class="layui-footer">
+			<!-- 底部固定区域 -->
+			© designed by leipeide
+		</div>
+	</div>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../layui/layui.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/model.js"></script>
+    <script src="../jsp/Vue.js"></script>
+	<script>
+        var localhost = "..";
+        // get username and password from cookie.
+        // get the data of user by ajax post function.
+		var jsonObj = {
+			"devArr" : [ {
+				"devMac" : "02AB1205004B1200",
+				"devName" : "02AB1205004B1200",
+				"devNet" : 0,
+				"gprsPhone" : "13116708817",
+				"userid" : 100000
+			} ],
+			"devAttrArr" : [ {
+				"devMac" : "02AB1205004B1200",
+				"zigbeeFinder" : 0
+			} ],
+			"groupArr" : [ {
+				"groupName" : "group1",
+				"groupid" : 1003,
+				"userid" : 100000
+			}, {
+				"groupName" : "group2",
+				"groupid" : 1004,
+				"userid" : 100000
+			} ],
+			"groupPairArr" : [ {
+				"groupid" : 1003,
+				"id" : 1,
+				"userid" : 100000,
+				"zigbeeMac" : "240FCE0A004B1200"
+			} ],
+			"ployArr" : [ {
+				"bindData" : "1003",
+				"bindType" : 1,
+				"id" : 2,
+				"ployName" : "策略A",
+				"status" : 0,
+				"timeZone" : -540,
+				"userid" : 100000
+			}, {
+				"bindData" : "1004",
+				"bindType" : 1,
+				"id" : 3,
+				"ployName" : "celueb",
+				"status" : 0,
+				"timeZone" : -480,
+				"userid" : 100000
+			} ],
+			"ployOperateArr" : [ {
+				"hours" : 23,
+				"id" : 1,
+				"minutes" : 0,
+				"operateParam" : 70,
+				"operateType" : 2,
+				"ployid" : 2
+			}, {
+				"hours" : 0,
+				"id" : 2,
+				"minutes" : 0,
+				"operateParam" : 0,
+				"operateType" : 1,
+				"ployid" : 2
+			}, {
+				"hours" : 12,
+				"id" : 3,
+				"minutes" : 0,
+				"operateParam" : 1,
+				"operateType" : 1,
+				"ployid" : 2
+			}, {
+				"hours" : 13,
+				"id" : 4,
+				"minutes" : 0,
+				"operateParam" : 100,
+				"operateType" : 2,
+				"ployid" : 2
+			} ],
+			"user" : {
+				"email" : "admin@xx.com",
+				"id" : 100000,
+				"password" : "admin",
+				"phone" : "xxx-xxxx-xxxx",
+				"username" : "admin"
+			},
+			"zigbeeArr" : [ {
+				"devMac" : "02AB1205004B1200",
+				"zigbeeBright" : 100,
+				"zigbeeMac" : "240FCE0A004B1200",
+				"zigbeeName" : "240FCE0A004B1200",
+				"zigbeeNet" : 0,
+				"zigbeeSaddr" : "CF1D",
+				"zigbeeStatus" : 1
+			}, {
+				"devMac" : "02AB1205004B1200",
+				"zigbeeBright" : 100,
+				"zigbeeMac" : "4817CE0A004B1200",
+				"zigbeeName" : "4817CE0A004B1200",
+				"zigbeeNet" : 0,
+				"zigbeeSaddr" : "0AE4",
+				"zigbeeStatus" : 1
+			} ],
+			"zigbeeAttrArr" : [ {
+				"humidity" : 75,
+				"minPower" : 50,
+				"power" : 1000,
+				"temperature" : 25,
+				"type" : 1,
+				"version" : "1.0",
+				"zigbeeMac" : "240FCE0A004B1200"
+			}, {
+				"humidity" : 6000,
+				"power" : 1000,
+				"temperature" : 3652,
+				"type" : 1,
+				"version" : "01",
+				"zigbeeMac" : "4817CE0A004B1200"
+			} ]
+        };
+        var user = new User();
+        userDataRefresh(user, jsonObj);// refresh all data except ploy page.
+        ployDataRefresh(user, jsonObj);// refresh ploy page data.
+        // alert(JSON.stringify(user));
+        var btnRange = new Array();
+        for (var i = 100; i > 0; i--) {
+            btnRange.push(i);
+        }
+        var topNavVue = new Vue({
+            el: '#topNav',
+            data: {
+                user: user,
+            },
+            methods: {
+                userInfo: function(user) {
+                    alert(JSON.stringify(user));
+                },
+                exit: function(user) {
+                    // remove the cookie from browser
+                    layer.msg("remove the cookie form browser");
+                },
+            }
+        });
+        var leftNavVue = new Vue({
+            el: '#leftNav',
+            data: {
+                devSet: user.devSet,
+                groupSet: user.groupSet,
+                ploySet: user.ployArray,
+            }
+        });
+        var devTabVue = new Vue({
+            el: '#devTab',
+            data: {
+                devSet: user.devSet,
+                zigbeeSet: user.zigbeeSet,
+                btnRange: btnRange,
+            },
+            methods: {
+                showZigbeeDetail: function (zigbee) {
+                    // alert(JSON.stringify(zigbee));
+                    layer.open({
+                        title: 'node detail',
+						content: '',
+                    });
+                },
+            },
+        });
+
+        var pageTimer = {}; //定义定时器全局变量
+
+        function intervalRefresh() {
+            $.ajax({
+                type: "post",
+                url: localhost + "/user/refresh.do",
+                data: {
+                    userid: user.id,
+                },
+                async: true,
+                datatype: "json",
+                success: function (datasource, textStatus, jqXHR) {
+                    var data = eval('(' + datasource + ')');
+                    if (data.error == null || data.error == "" || data.error == undefined) {//未出错
+                        userDataRefresh(user, data);//调用数据更新函数
+                    } else {
+                        alertVue.show("出错了", data.error);
+                    }
+                },
+                error: function () {
+                    alertVue.show("出错了", "服务器链接已断开!");
+                    // for(var each in pageTimer){//全部清除方法
+                    //     window.clearInterval(pageTimer[each]);
+                    // }
+                    window.clearInterval(pageTimer.timer1);
+                }
+            });
+        }
+        pageTimer.timer1 = setInterval("intervalRefresh()", 5000);//定时刷新，单位毫秒
+    </script>
+</body>
+
+</html>
