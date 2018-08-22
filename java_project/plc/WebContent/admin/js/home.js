@@ -26,3 +26,13 @@ function testAJAX() {
 	req.open("get", "${pageContext.request.contextPath }/servlet");//建立一个链接
 	req.send(null);//发送请求
 }
+/**
+ * 左侧导航栏点击集控器名称
+ * @param id 集控器id
+ * @returns
+ */
+function deviceOnclick(id) {
+	// 根据设备id获取节点信息
+	// 根据节点信息更新表格数据
+	alert(id);
+}

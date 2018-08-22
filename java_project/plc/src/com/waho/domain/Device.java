@@ -4,9 +4,19 @@ public class Device {
 	private int id;
 	private int userid;// 用户id
 	private String deviceMac;// 设备mac地址
+	private String deviceName;// 设备名称
 	private boolean online;// 在线状态
 	private int currentNodes;// 当前从节点数量
 	private int maxNodes;// 最大从节点数量
+	
+	
+	
+	public String getDeviceName() {
+		return deviceName;
+	}
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
 	public int getId() {
 		return id;
 	}
