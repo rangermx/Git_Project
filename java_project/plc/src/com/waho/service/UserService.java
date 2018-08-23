@@ -1,6 +1,9 @@
 package com.waho.service;
 
+import java.util.List;
 import java.util.Map;
+
+import com.waho.domain.Node;
 
 
 public interface UserService {
@@ -11,4 +14,10 @@ public interface UserService {
 	 * @return
 	 */
 	public Map<String, Object> login(String username, String password);
+	
+	/**
+	 * 根据集控器设备id获取节点信息
+	 * @return
+	 */
+	public List<Node> getNodesByDeviceid(int deviceid);
 }

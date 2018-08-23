@@ -12,6 +12,7 @@ function getXMLHttpRequest() {
 }
 /**
  * AJAX测试
+ * 
  * @returns
  */
 function testAJAX() {
@@ -23,16 +24,17 @@ function testAJAX() {
 			}
 		}
 	}
-	req.open("get", "${pageContext.request.contextPath }/servlet");//建立一个链接
-	req.send(null);//发送请求
+	req.open("get", "${pageContext.request.contextPath }/servlet");// 建立一个链接
+	req.send(null);// 发送请求
 }
 /**
  * 左侧导航栏点击集控器名称
- * @param id 集控器id
+ * 
+ * @param id
+ *            集控器id
  * @returns
  */
-function deviceOnclick(id) {
-	// 根据设备id获取节点信息
-	// 根据节点信息更新表格数据
-	alert(id);
+function deviceOnclick(url, id) {
+	document.getElementById('body-div').innerHTML = "<iframe style='min-height: 500px' name='fname' frameborder='0' scrolling='no' width='100%' src='"+url+"?deviceid="+id+"' class='body-frame'></iframe>";
 }
+

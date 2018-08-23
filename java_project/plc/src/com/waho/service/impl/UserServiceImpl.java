@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.waho.dao.DeviceDao;
+import com.waho.dao.NodeDao;
 import com.waho.dao.UserDao;
 import com.waho.dao.impl.DeviceDaoImpl;
+import com.waho.dao.impl.NodeDaoImpl;
 import com.waho.dao.impl.UserDaoImpl;
 import com.waho.domain.Device;
+import com.waho.domain.Node;
 import com.waho.domain.User;
 import com.waho.service.UserService;
 
@@ -34,6 +37,18 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return resultMap;
+	}
+
+	@Override
+	public List<Node> getNodesByDeviceid(int deviceid) {
+		NodeDao nodeDao = new NodeDaoImpl();
+		List<Node> list = null;
+		try {
+			list = nodeDao.selectNodesByDeviceid(deviceid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }
