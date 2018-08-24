@@ -38,7 +38,7 @@
 						<td>${device.currentNodes }</td>
 						<td>${device.maxNodes }</td>
 						<td><a href="javascript:;"
-							onclick="deviceBroadcastControl('${pageContext.request.contextPath }/broadcastServlet', ${device.id })">广播控制</a></td>
+							onclick="deviceBroadcastControl('${pageContext.request.contextPath }/broadcastFormServlet', ${device.id })">广播控制</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

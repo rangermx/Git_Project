@@ -1,29 +1,23 @@
 package com.waho.servlet;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.waho.service.UserService;
-import com.waho.service.impl.UserServiceImpl;
-import com.waho.domain.Node;
-
 /**
- * 根据集控器id获取节点信息，body跳转到nodes.jsp页面
+ * 接受用户提交的广播控制指令
  */
-@WebServlet("/getNodesServlet")
-public class GetNodesServlet extends HttpServlet {
+@WebServlet("/broadcastServlet")
+public class BroadcastServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetNodesServlet() {
+	public BroadcastServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -37,16 +31,18 @@ public class GetNodesServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		// 获取表单数据
-		String deviceidString = request.getParameter("deviceid");
-		if (deviceidString != null) {
-			int deviceid = Integer.parseInt(deviceidString);
+		String deviceid = request.getParameter("deviceid");
+		String light1State = request.getParameter("light1State");
+		String light2State = request.getParameter("light2State");
+		String light1PowerPercent = request.getParameter("light1PowerPercent");
+		String light2PowerPercent = request.getParameter("light2PowerPercent");
+		System.out.println(
+				deviceid + " " + light1State + " " + light2State + " " + light1PowerPercent + " " + light2PowerPercent);
+		if (deviceid != null) {// 数据有效
 			// 调用业务逻辑
-			UserService userService = new UserServiceImpl();
-			List<Node> list = userService.getNodesByDeviceid(deviceid);
-			request.setAttribute("nodes", list);
-			// 分发转向
-			request.getRequestDispatcher("/admin/nodes.jsp").forward(request, response);
 		}
+		// 分发转向
+		response.getWriter().write("提交完成!");
 	}
 
 	/**

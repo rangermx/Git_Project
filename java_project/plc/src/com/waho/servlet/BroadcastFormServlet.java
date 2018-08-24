@@ -8,16 +8,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class NodeControlServlet
+ * 根据集控器id跳转广播控制form表单
  */
-@WebServlet("/nodeControlServlet")
-public class NodeControlServlet extends HttpServlet {
+@WebServlet("/broadcastFormServlet")
+public class BroadcastFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NodeControlServlet() {
+    public BroadcastFormServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -26,9 +26,8 @@ public class NodeControlServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 获取表单数据
-		// 调用业务逻辑
-		// 分发转向
+		request.setAttribute("deviceid", request.getParameter("deviceid"));
+		request.getRequestDispatcher("/admin/broadcastForm.jsp").forward(request, response);
 	}
 
 	/**

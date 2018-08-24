@@ -1,28 +1,23 @@
 package com.waho.servlet;
 
 import java.io.IOException;
-import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.waho.service.UserService;
-import com.waho.service.impl.UserServiceImpl;
-
 /**
- * 登录servlet
+ * 根据nodeid跳转节点控制form表单
  */
-@WebServlet("/loginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/nodeFormServlet")
+public class NodeFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public NodeFormServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,20 +26,8 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html; charset=UTF-8");
-		// 获取表单数据
-		
-		// 调用业务逻辑
-		UserService userService = new UserServiceImpl();
-		Map<String, Object> result = userService.login("admin", "admin");
-		// 分发转向
-		if (null == result) {
-			// 跳转error页面 or 返回错误信息
-		} else {
-			request.setAttribute("result", result);
-			request.getRequestDispatcher("/admin/home.jsp").forward(request, response);
-		}
+		request.setAttribute("nodeid", request.getParameter("nodeid"));
+		request.getRequestDispatcher("/admin/nodeForm.jsp").forward(request, response);
 	}
 
 	/**

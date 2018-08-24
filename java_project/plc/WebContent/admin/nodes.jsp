@@ -42,7 +42,7 @@
 						<td>${node.light2State == true ? "开" : "关" }</td>
 						<td>${node.light2PowerPercent }</td>
 						<td>${node.power }W</td>
-						<td><a href="javascript:;" onclick="nodeControl('${pageContext.request.contextPath }/nodeControlServlet', ${node.id })">单灯控制</a></td>
+						<td><a href="javascript:;" onclick="nodeControl('${pageContext.request.contextPath }/nodeFormServlet', ${node.id })">单灯控制</a></td>
 						<td><a>刷新</a></td>
 					</tr>
 				</c:forEach>

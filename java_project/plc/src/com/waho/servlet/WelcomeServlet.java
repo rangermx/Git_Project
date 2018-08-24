@@ -13,7 +13,7 @@ import com.waho.service.UserService;
 import com.waho.service.impl.UserServiceImpl;
 
 /**
- * Servlet implementation class WelcomeServlet
+ * 登陆成功后body跳转welcome.jsp页面
  */
 @WebServlet("/welcomeServlet")
 public class WelcomeServlet extends HttpServlet {
