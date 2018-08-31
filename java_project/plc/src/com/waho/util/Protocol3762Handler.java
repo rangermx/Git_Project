@@ -1,4 +1,4 @@
-package com.waho.socket.util;
+package com.waho.util;
 
 import java.util.Map;
 

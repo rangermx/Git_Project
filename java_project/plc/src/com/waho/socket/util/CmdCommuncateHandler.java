@@ -19,11 +19,11 @@ public class CmdCommuncateHandler extends SocketDataHandler {
 
 	private CmdCommuncateHandler(SocketDataHandler nextHandler) {
 		super(nextHandler);
-		this.setCmdType(SocketCommand.CMD_COMMUNCATE);
+		this.setCmdType(SocketCommand.CMD_COMMUNCATE_REP);
 	}
 
 	@Override
-	public byte[] socketCommandHandle(SocketCommand sc) {
+	public SocketCommand socketCommandHandle(SocketCommand sc) {
 		if (sc.getCommand() == this.getCmdType()) {
 
 		} else if (nextHandler != null) {

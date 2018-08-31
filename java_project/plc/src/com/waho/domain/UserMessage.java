@@ -35,5 +35,10 @@ public class UserMessage extends SocketCommand {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public String toString() {
+		return "UserMessage [id=" + id + ", userid=" + userid + ", deviceMac=" + deviceMac + ", executed=" + executed
+				+ "]";
+	}
 	
 }

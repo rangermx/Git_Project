@@ -23,7 +23,7 @@ public class CmdUnknownHandler extends SocketDataHandler {
 	}
 
 	@Override
-	public byte[] socketCommandHandle(SocketCommand sc) {
+	public SocketCommand socketCommandHandle(SocketCommand sc) {
 		if (sc.getCommand() == this.getCmdType()) {
 		} else if (nextHandler != null) {
 			return nextHandler.socketCommandHandle(sc);

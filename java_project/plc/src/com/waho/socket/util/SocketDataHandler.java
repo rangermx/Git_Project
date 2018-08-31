@@ -31,7 +31,7 @@ public abstract class SocketDataHandler {
 	 *            数据长度
 	 * @return bytes 如果指令解析完成后，根据交互逻辑判断，需要回复集控器，则返回回复数据
 	 */
-	public byte[] socketDataHandle(byte[] bytes, int len) {
+	public SocketCommand socketDataHandle(byte[] bytes, int len) {
 		
 		SocketCommand sc = SocketCommand.parseSocketCommand(bytes, len);
 		
@@ -48,7 +48,7 @@ public abstract class SocketDataHandler {
 	 * @param sc
 	 * @return
 	 */
-	public abstract byte[] socketCommandHandle(SocketCommand sc);
+	public abstract SocketCommand socketCommandHandle(SocketCommand sc);
 
 	public static void UserMessageHandle(Device device, OutputStream out) {
 		UserMessageDao dao = new UserMessageDaoImpl();

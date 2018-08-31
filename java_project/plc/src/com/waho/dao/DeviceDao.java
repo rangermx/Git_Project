@@ -6,4 +6,7 @@ import com.waho.domain.Device;
 
 public interface DeviceDao {
 	public List<Device> selectDeviceByUserid(int id) throws Exception;
+	public Device selectDeviceById(int id) throws Exception;
+	public Device selectDeviceByDeviceMac(String deviceMac) throws Exception;
+	public int updateDeviceOnline(Device device) throws Exception;
 }

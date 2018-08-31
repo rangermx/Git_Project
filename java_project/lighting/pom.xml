@@ -93,11 +93,8 @@
 			<version>1.2.2</version>
 		</dependency>
 		<!-- 导入java ee jar 包 -->
-		<!-- <dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>javax</groupId> <artifactId>javaee-api</artifactId> 
+			<version>7.0</version> </dependency> -->
 		<!-- 导入Mysql数据库链接jar包 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -166,9 +163,9 @@
 			<version>2.1.0</version>
 		</dependency>
 		<dependency>
-		    <groupId>taglibs</groupId>
-		    <artifactId>standard</artifactId>
-		    <version>1.1.2</version>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
 		</dependency>
 		<!-- 上传组件包 -->
 		<dependency>
@@ -194,6 +191,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<defaultGoal>compile</defaultGoal>
 		<pluginManagement>
 			<plugins>
 				<plugin>

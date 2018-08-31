@@ -15,6 +15,7 @@ import com.test.domain.Group;
 import com.test.domain.GroupPair;
 import com.test.domain.Zigbee;
 import com.test.domain.ZigbeeAttr;
+import com.test.util.UnusualUtils;
 
 /**
  * 多线程处理socket接收的数据
@@ -122,6 +123,7 @@ public class SocketOperate extends Thread {
 //					System.out.println("添加失败");
 				}
 			}
+			UnusualUtils.RecordUnusualTemperatureToDB(zigbeeAttr);
 
 		} else {// 状态异常
 

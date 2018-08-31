@@ -6,11 +6,19 @@ public class SocketCommand {
 
 	public static final byte CMD_CONTROL = 0x01;
 	public static final byte CMD_COMMUNCATE = 0x02;
-	public static final byte CMD_HEARTBEAT = 0x03;
-	public static final byte CMD_READ_MAC = 0x04;
+	public static final byte CMD_HEARTBEAT_REP = 0x03;
+	public static final byte CMD_READ_MAC_REP = 0x04;
 	public static final byte CMD_BROADCAST = 0x05;
-	public static final byte CMD_MAIN_NODE_MSG = 0x06;
-	public static final byte CMD_NODE_MSG = 0x07;
+	public static final byte CMD_MAIN_NODE_MSG_REP = 0x06;
+	public static final byte CMD_NODE_MSG_REP = 0x07;
+	
+	public static final byte CMD_CONTROL_REP = 0x41;
+	public static final byte CMD_COMMUNCATE_REP = 0x42;
+	public static final byte CMD_HEARTBEAT = 0x43;
+	public static final byte CMD_READ_MAC = 0x44;
+	public static final byte CMD_BROADCAST_REP = 0x45;
+	public static final byte CMD_MAIN_NODE_MSG = 0x46;
+	public static final byte CMD_NODE_MSG = 0x47;
 
 	public static final byte CMD_UNKNOWN = 0x00;
 
@@ -18,7 +26,12 @@ public class SocketCommand {
 	private byte dataLen;
 	private byte[] data;
 	private byte checkSum;
-
+	/**
+	 * 将接收到的客户端指令byte数组，转换为指令对象
+	 * @param bytes
+	 * @param len
+	 * @return
+	 */
 	public static SocketCommand parseSocketCommand(byte[] bytes, int len) {
 		SocketCommand sc = new SocketCommand();
 		if (bytes[0] == HEADER[0] && bytes[1] == HEADER[1] && bytes[len - 2] == TAIL[0] && bytes[len - 1] == TAIL[1]) {//头尾正确
@@ -66,13 +79,20 @@ public class SocketCommand {
 		checkSum = sum;
 		return checkSum;
 	}
-
+	/**
+	 * 将指令对象转换为指令byte数组
+	 * @return
+	 */
 	public byte[] tobyteArray() {
 		byte[] bytes = new byte[this.getDataLen() + 7];
 		System.arraycopy(HEADER, 0, bytes, 0, 2);
 		bytes[2] = this.getCommand();
-		bytes[3] = this.getDataLen();
-		System.arraycopy(this.getData(), 0, bytes, 4, this.getDataLen());
+		if (this.getDataLen() >= 0 && this.getData() != null) {
+			bytes[3] = this.getDataLen();
+			System.arraycopy(this.getData(), 0, bytes, 4, this.getDataLen());
+		} else {
+			bytes[3] = this.getDataLen();
+		}
 		bytes[bytes.length - 3] = this.getCheckSum();
 		System.arraycopy(TAIL, 0, bytes, bytes.length - 2, 2);
 		return bytes;

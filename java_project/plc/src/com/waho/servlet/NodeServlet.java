@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.waho.service.UserService;
+import com.waho.service.impl.UserServiceImpl;
+
 
 /**
  * 接受用户提交的节点控制指令
@@ -29,6 +32,7 @@ public class NodeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
+		UserService us = new UserServiceImpl();
 		// 获取表单数据
 		String nodeid = request.getParameter("nodeid");
 		String light1State = request.getParameter("light1State");
@@ -37,9 +41,12 @@ public class NodeServlet extends HttpServlet {
 		String light2PowerPercent = request.getParameter("light2PowerPercent");
 		if (nodeid != null) {// 数据有效
 			// 调用业务逻辑
+			us.userWriteNodeCmd(Integer.parseInt(nodeid), light1State, light2State, light1PowerPercent, light2PowerPercent);
+			// 分发转向
+			response.getWriter().write("提交完成!");
+			return;
 		}
-		// 分发转向
-		response.getWriter().write("提交完成!");
+		response.getWriter().write("提交失败!");
 	}
 
 	/**

@@ -18,4 +18,12 @@ public interface UserMessageDao {
 	 */
 	public int updateUserMessage(UserMessage um) throws Exception;
 	
+	/**
+	 * 插入新的用户指令
+	 * @param um
+	 * @return
+	 * @throws Exception
+	 */
+	public int insertUserMessage(UserMessage um) throws Exception;
+	
 }

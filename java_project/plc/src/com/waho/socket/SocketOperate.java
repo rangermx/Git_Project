@@ -108,7 +108,7 @@ public class SocketOperate extends Thread {
 					temp = cmdList.getFirst();
 					if (temp != null) {
 						// 读设备发送的指令
-						state.clientDataHandle(temp, temp.length, CCH);
+						state.clientDataHandle(temp, temp.length, CCH, device, out, state);
 						// 处理完数据后从列表中移除
 						cmdList.removeFirst();
 						temp = null;
