@@ -34,7 +34,7 @@ public class CmdReadmacHandler extends SocketDataHandler {
 			rep.setDataLen((byte)0x00);
 			// 2、查询数据库，是否有mac地址相同的集控器，如果有，就修改状态，如果没有，就添加
 			DeviceDao deviceDao = new DeviceDaoImpl();
-			String deviceMac = new String(sc.getData());
+			String deviceMac = SocketCommand.parseBytesToHexString(sc.getData(), sc.getDataLen());
 			try {
 				Device device = deviceDao.selectDeviceByDeviceMac(deviceMac);
 				if (device != null) {
@@ -42,6 +42,13 @@ public class CmdReadmacHandler extends SocketDataHandler {
 					deviceDao.updateDeviceOnline(device);
 				} else {
 					device = new Device();
+					device.setDeviceMac(deviceMac);
+					device.setDeviceName(deviceMac);
+					device.setOnline(true);
+					device.setUserid(1000);
+					device.setMaxNodes(0);
+					device.setCurrentNodes(0);
+					deviceDao.insert(device);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

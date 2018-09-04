@@ -46,6 +46,28 @@ public class SocketCommand {
 		}
 		return null;
 	}
+	
+	public static String parseBytesToHexString(byte[] bytes, int length) {
+		StringBuffer sb = new StringBuffer();
+		String temp;
+		for (int i = 0; i < length; i++) {
+			temp = Integer.toHexString(bytes[i] & 0xFF);
+			if (temp.length() == 1) {
+				sb.append("0" + temp);
+			} else if (temp.length() == 2) {
+				sb.append(temp);
+			}
+		}
+		return sb.toString();
+	}
+	
+	public static byte[] parseHexStringToBytes(String hexString) {
+		byte[] bytes = new byte[hexString.length() / 2];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = (byte)(Integer.parseInt(hexString.substring(i*2, i*2+2)) & 0xFF);
+		}
+		return bytes;
+	}
 
 	public byte getCommand() {
 		return command;
@@ -73,8 +95,10 @@ public class SocketCommand {
 
 	public byte getCheckSum() {
 		byte sum = (byte) (HEADER[0] + HEADER[1] + this.getCommand() + this.getDataLen());
-		for (byte byte1 : this.getData()) {
-			sum = (byte) (sum + byte1);
+		if (this.getData() != null && this.getData().length > 0) {
+			for (byte byte1 : this.getData()) {
+				sum = (byte) (sum + byte1);
+			}
 		}
 		checkSum = sum;
 		return checkSum;

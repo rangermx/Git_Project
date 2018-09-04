@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import com.waho.dao.DeviceDao;
+import com.waho.dao.impl.DeviceDaoImpl;
 import com.waho.domain.Device;
 import com.waho.socket.state.SocketState;
 import com.waho.socket.state.impl.RegisterState;
@@ -34,6 +36,7 @@ public class SocketOperate extends Thread {
 	private static CmdHeartbeatHandler CHH;
 	private static CmdCommuncateHandler CMH;
 	private static CmdControlHandler CCH;
+	private static DeviceDao SocketDeviceDao;
 	
 	private static final int KEEP_ONLINE_TIME = 30;
 
@@ -57,6 +60,7 @@ public class SocketOperate extends Thread {
 		CHH = CmdHeartbeatHandler.getInstance(CRH);// 处理心跳包
 		CMH = CmdCommuncateHandler.getInstance(CHH);// 处理从节点通讯指令
 		CCH = CmdControlHandler.getInstance(CMH);// 处理主节点控制指令
+		SocketDeviceDao = new DeviceDaoImpl();
 	}
 
 	public SocketOperate(Socket socket) {
@@ -102,13 +106,18 @@ public class SocketOperate extends Thread {
 			};
 			this.readThread.start();
 			byte[] temp;
+			SocketState conversion;
 			while (!socket.isClosed()) {
 				
 				while (!cmdList.isEmpty()) {
 					temp = cmdList.getFirst();
 					if (temp != null) {
 						// 读设备发送的指令
-						state.clientDataHandle(temp, temp.length, CCH, device, out, state);
+						conversion = state.clientDataHandle(temp, temp.length, CCH, device, out);
+						if (conversion != null) {
+							state = conversion;
+							conversion = null;
+						}
 						// 处理完数据后从列表中移除
 						cmdList.removeFirst();
 						temp = null;
@@ -132,6 +141,15 @@ public class SocketOperate extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
+			// 将设备状态更新至离线
+			if (device.getDeviceMac() != null) {
+				device.setOnline(false);
+				try {
+					SocketDeviceDao.updateDeviceOnline(device);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			System.out.println("socket stop!");
 			if (out != null) {
 				try {

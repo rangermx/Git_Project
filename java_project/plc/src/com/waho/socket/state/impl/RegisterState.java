@@ -29,18 +29,27 @@ public class RegisterState implements SocketState {
 	}
 
 	@Override
-	public void clientDataHandle(byte[] data, int length, SocketDataHandler handler, Device device, OutputStream out, SocketState state) {
+	public SocketState clientDataHandle(byte[] data, int length, SocketDataHandler handler, Device device, OutputStream out) {
 		SocketCommand result = handler.socketDataHandle(data, length);// 取处理结果
-		if (result.getCommand() == SocketCommand.CMD_READ_MAC_REP) {// 如果是上报mac地址
+		if (result != null && result.getCommand() == SocketCommand.CMD_READ_MAC_REP) {// 如果是上报mac地址
 			// 1、给socket的deivce赋值
 			SocketCommand sc = SocketCommand.parseSocketCommand(data, length);
-			String deviceMac = new String(sc.getData());
+			String deviceMac = SocketCommand.parseBytesToHexString(sc.getData(), sc.getDataLen());
 			DeviceDao deviceDao = new DeviceDaoImpl();
 			try {
-				device = deviceDao.selectDeviceByDeviceMac(deviceMac);
+				Device dbDevice = deviceDao.selectDeviceByDeviceMac(deviceMac);
+				device.setId(dbDevice.getId());
+				device.setDeviceMac(dbDevice.getDeviceMac());
+				device.setDeviceName(dbDevice.getDeviceName());
+				device.setCurrentNodes(dbDevice.getCurrentNodes());
+				device.setOnline(dbDevice.isOnline());
+				device.setMaxNodes(dbDevice.getMaxNodes());
+				device.setUserid(dbDevice.getUserid());
 				if (device != null) {
-					// 2、将状态切换到idle状态
-					// 3、回复指令
+					// 2、回复指令
+					out.write(result.tobyteArray());
+					// 3、将状态切换到idle状态
+					return IdleState.getInstance();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -48,13 +57,12 @@ public class RegisterState implements SocketState {
 		} else {// 其他指令一概不处理
 			
 		}
-		System.out.write(data, 0, length);
-		System.out.println();
+		return null;
 	}
 
 	@Override
 	public void userMsgHanle(Device device, OutputStream out) {
-		System.out.println(device.getDeviceMac());
+		
 	}
 
 }

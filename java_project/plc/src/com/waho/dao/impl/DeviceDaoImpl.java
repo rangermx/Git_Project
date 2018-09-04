@@ -1,5 +1,6 @@
 package com.waho.dao.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.commons.dbutils.QueryRunner;
@@ -35,6 +36,16 @@ public class DeviceDaoImpl implements DeviceDao {
 	public int updateDeviceOnline(Device device) throws Exception {
 		QueryRunner qr = new QueryRunner(C3P0Utils.getDataSource());
 		return qr.update("UPDATE devices SET online=? WHERE deviceMac=?", device.isOnline(), device.getDeviceMac());
+	}
+
+	@Override
+	public int insert(Device device) throws Exception {
+		QueryRunner qr = new QueryRunner(C3P0Utils.getDataSource());
+		return qr.update(
+				"INSERT INTO `plc`.`devices` (`deviceMac`, `userid`, `online`, `currentNodes`, `maxNodes`, `deviceName`) VALUES (?, ?, ?, ?, ?, ?)",
+				device.getDeviceMac(), device.getUserid(), device.isOnline(), device.getCurrentNodes(),
+				device.getMaxNodes(), device.getDeviceName());
+
 	}
 
 }

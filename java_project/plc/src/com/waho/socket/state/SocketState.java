@@ -12,7 +12,7 @@ public interface SocketState {
 	 * @param length
 	 * @param handler
 	 */
-	public void clientDataHandle(byte[] data, int length, SocketDataHandler handler, Device device, OutputStream out, SocketState state);
+	public SocketState clientDataHandle(byte[] data, int length, SocketDataHandler handler, Device device, OutputStream out);
 	/**
 	 * 处理用户写入到数据库的指令
 	 * @param device

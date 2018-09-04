@@ -33,7 +33,7 @@ public class SocketThread extends Thread {
 				if (socket != null && !socket.isClosed()) {
 					// 处理接受的数据
 					new SocketOperate(socket).start();
-					System.out.println("socket start......");
+//					System.out.println("socket start......");
 //					socket.setSoTimeout(10 * 1000 * 1);//链接超时时长，单位毫秒，0为死等
 				}
 

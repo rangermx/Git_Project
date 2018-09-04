@@ -9,4 +9,5 @@ public interface DeviceDao {
 	public Device selectDeviceById(int id) throws Exception;
 	public Device selectDeviceByDeviceMac(String deviceMac) throws Exception;
 	public int updateDeviceOnline(Device device) throws Exception;
+	public int insert(Device device) throws Exception;
 }
