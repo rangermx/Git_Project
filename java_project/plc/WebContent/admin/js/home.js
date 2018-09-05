@@ -35,6 +35,6 @@ function testAJAX() {
  * @returns
  */
 function deviceOnclick(url, id) {
-	document.getElementById('body-div').innerHTML = "<iframe style='min-height: 500px' name='fname' frameborder='0' scrolling='no' width='100%' src='"+url+"?deviceid="+id+"' class='body-frame'></iframe>";
+	document.getElementById('body-div').innerHTML = "<iframe style='min-height: 500px' name='fname' frameborder='0' scrolling='yes' width='100%' src='"+url+"?deviceid="+id+"' class='body-frame'></iframe>";
 }
 

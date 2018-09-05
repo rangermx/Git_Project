@@ -31,14 +31,14 @@ public abstract class SocketDataHandler {
 	 *            数据长度
 	 * @return bytes 如果指令解析完成后，根据交互逻辑判断，需要回复集控器，则返回回复数据
 	 */
-	public SocketCommand socketDataHandle(byte[] bytes, int len) {
+	public SocketCommand socketDataHandle(byte[] bytes, int len, Device device) {
 		
 		SocketCommand sc = SocketCommand.parseSocketCommand(bytes, len);
 		
 		if (sc != null) {// 数据有效
-			return this.socketCommandHandle(sc);
+			return this.socketCommandHandle(sc, device);
 		}
-
+		System.out.println("数据无效");
 		return null;
 	}
 
@@ -48,7 +48,7 @@ public abstract class SocketDataHandler {
 	 * @param sc
 	 * @return
 	 */
-	public abstract SocketCommand socketCommandHandle(SocketCommand sc);
+	public abstract SocketCommand socketCommandHandle(SocketCommand sc, Device device);
 
 	public static void UserMessageHandle(Device device, OutputStream out) {
 		UserMessageDao dao = new UserMessageDaoImpl();

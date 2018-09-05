@@ -48,4 +48,10 @@ public class DeviceDaoImpl implements DeviceDao {
 
 	}
 
+	@Override
+	public int updateDeviceNodes(Device device) throws Exception {
+		QueryRunner qr = new QueryRunner(C3P0Utils.getDataSource());
+		return qr.update("UPDATE devices SET maxNodes=?,currentNodes=? WHERE deviceMac=?", device.getMaxNodes(), device.getCurrentNodes(), device.getDeviceMac());
+	}
+
 }

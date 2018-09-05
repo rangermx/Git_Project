@@ -11,7 +11,35 @@ public class Node {
 	private int light1PowerPercent;
 	private int light2PowerPercent;
 	private int power;
+	private int signal;
+	private int relayLevel;
+	private int agreement;
+	private int Phase;
 	
+	public int getSignal() {
+		return signal;
+	}
+	public void setSignal(int signal) {
+		this.signal = signal;
+	}
+	public int getRelayLevel() {
+		return relayLevel;
+	}
+	public void setRelayLevel(int relayLevel) {
+		this.relayLevel = relayLevel;
+	}
+	public int getAgreement() {
+		return agreement;
+	}
+	public void setAgreement(int agreement) {
+		this.agreement = agreement;
+	}
+	public int getPhase() {
+		return Phase;
+	}
+	public void setPhase(int phase) {
+		Phase = phase;
+	}
 	public int getId() {
 		return id;
 	}

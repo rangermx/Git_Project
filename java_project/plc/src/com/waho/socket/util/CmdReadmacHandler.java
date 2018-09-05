@@ -26,7 +26,7 @@ public class CmdReadmacHandler extends SocketDataHandler {
 	}
 
 	@Override
-	public SocketCommand socketCommandHandle(SocketCommand sc) {
+	public SocketCommand socketCommandHandle(SocketCommand sc, Device device) {
 		if (sc.getCommand() == this.getCmdType()) {
 			// 1、返回回复指令
 			SocketCommand rep = new SocketCommand();
@@ -36,26 +36,26 @@ public class CmdReadmacHandler extends SocketDataHandler {
 			DeviceDao deviceDao = new DeviceDaoImpl();
 			String deviceMac = SocketCommand.parseBytesToHexString(sc.getData(), sc.getDataLen());
 			try {
-				Device device = deviceDao.selectDeviceByDeviceMac(deviceMac);
-				if (device != null) {
-					device.setOnline(true);
-					deviceDao.updateDeviceOnline(device);
+				Device temp = deviceDao.selectDeviceByDeviceMac(deviceMac);
+				if (temp != null) {
+					temp.setOnline(true);
+					deviceDao.updateDeviceOnline(temp);
 				} else {
-					device = new Device();
-					device.setDeviceMac(deviceMac);
-					device.setDeviceName(deviceMac);
-					device.setOnline(true);
-					device.setUserid(1000);
-					device.setMaxNodes(0);
-					device.setCurrentNodes(0);
-					deviceDao.insert(device);
+					temp = new Device();
+					temp.setDeviceMac(deviceMac);
+					temp.setDeviceName(deviceMac);
+					temp.setOnline(true);
+					temp.setUserid(1000);
+					temp.setMaxNodes(0);
+					temp.setCurrentNodes(0);
+					deviceDao.insert(temp);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return rep;
 		} else if (nextHandler != null) {
-			return nextHandler.socketCommandHandle(sc);
+			return nextHandler.socketCommandHandle(sc, device);
 		}
 		return null;
 	}

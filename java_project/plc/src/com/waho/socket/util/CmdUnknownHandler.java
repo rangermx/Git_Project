@@ -1,5 +1,6 @@
 package com.waho.socket.util;
 
+import com.waho.domain.Device;
 import com.waho.domain.SocketCommand;
 
 public class CmdUnknownHandler extends SocketDataHandler {
@@ -23,10 +24,12 @@ public class CmdUnknownHandler extends SocketDataHandler {
 	}
 
 	@Override
-	public SocketCommand socketCommandHandle(SocketCommand sc) {
+	public SocketCommand socketCommandHandle(SocketCommand sc, Device device) {
+		System.out.println(Integer.toHexString(sc.getCommand() & 0xFF) + " unknown");
 		if (sc.getCommand() == this.getCmdType()) {
+
 		} else if (nextHandler != null) {
-			return nextHandler.socketCommandHandle(sc);
+			return nextHandler.socketCommandHandle(sc, device);
 		}
 		return null;
 	}

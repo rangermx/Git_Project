@@ -29,8 +29,10 @@ public class IdleState implements SocketState {
 
 	@Override
 	public SocketState clientDataHandle(byte[] data, int length, SocketDataHandler handler, Device device, OutputStream out) {
+//		System.out.println(SocketCommand.parseBytesToHexString(data, data.length));
 		// 接受非登录操作的集控器数据，并进行相应的数据处理。
-		SocketCommand sc = handler.socketDataHandle(data, length);
+		SocketCommand sc = handler.socketDataHandle(data, length, device);
+//		System.out.println(handler);
 		// 如需要回复，进行回复
 		if (sc != null) {
 			try {

@@ -23,7 +23,7 @@ public class SocketCommand {
 	public static final byte CMD_UNKNOWN = 0x00;
 
 	private byte command;
-	private byte dataLen;
+	private int dataLen;
 	private byte[] data;
 	private byte checkSum;
 	/**
@@ -43,6 +43,9 @@ public class SocketCommand {
 			if (sc.getCheckSum() == bytes[len - 3]) {
 				return sc;
 			}
+//			System.out.println("校验错");
+//			System.out.println(sc.getCheckSum());
+//			System.out.println(bytes[len - 3]);
 		}
 		return null;
 	}
@@ -77,12 +80,16 @@ public class SocketCommand {
 		this.command = command;
 	}
 
-	public byte getDataLen() {
+	public int getDataLen() {
 		return dataLen;
 	}
 
-	public void setDataLen(byte dataLen) {
+	public void setDataLen(int dataLen) {
 		this.dataLen = dataLen;
+	}
+	
+	public void setDataLen(byte dataLen) {
+		this.dataLen = Integer.parseInt(Integer.toHexString(dataLen & 0xFF), 16);
 	}
 
 	public byte[] getData() {
@@ -94,7 +101,8 @@ public class SocketCommand {
 	}
 
 	public byte getCheckSum() {
-		byte sum = (byte) (HEADER[0] + HEADER[1] + this.getCommand() + this.getDataLen());
+		byte sum = (byte) (HEADER[0] + HEADER[1] + this.getCommand());
+		sum = (byte) (sum + (this.getDataLen() & 0xFF));
 		if (this.getData() != null && this.getData().length > 0) {
 			for (byte byte1 : this.getData()) {
 				sum = (byte) (sum + byte1);
@@ -112,10 +120,10 @@ public class SocketCommand {
 		System.arraycopy(HEADER, 0, bytes, 0, 2);
 		bytes[2] = this.getCommand();
 		if (this.getDataLen() >= 0 && this.getData() != null) {
-			bytes[3] = this.getDataLen();
+			bytes[3] = (byte)(this.getDataLen() & 0xFF);
 			System.arraycopy(this.getData(), 0, bytes, 4, this.getDataLen());
 		} else {
-			bytes[3] = this.getDataLen();
+			bytes[3] = (byte)(this.getDataLen() & 0xFF);
 		}
 		bytes[bytes.length - 3] = this.getCheckSum();
 		System.arraycopy(TAIL, 0, bytes, bytes.length - 2, 2);

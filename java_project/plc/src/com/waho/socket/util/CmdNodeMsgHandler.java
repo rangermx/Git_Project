@@ -1,5 +1,6 @@
 package com.waho.socket.util;
 
+import com.waho.domain.Device;
 import com.waho.domain.SocketCommand;
 
 public class CmdNodeMsgHandler extends SocketDataHandler {
@@ -23,11 +24,11 @@ public class CmdNodeMsgHandler extends SocketDataHandler {
 	}
 
 	@Override
-	public SocketCommand socketCommandHandle(SocketCommand sc) {
+	public SocketCommand socketCommandHandle(SocketCommand sc, Device device) {
 		if (sc.getCommand() == this.getCmdType()) {
 
 		} else if (nextHandler != null) {
-			return nextHandler.socketCommandHandle(sc);
+			return nextHandler.socketCommandHandle(sc, device);
 		}
 		return null;
 	}
