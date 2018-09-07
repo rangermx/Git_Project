@@ -26,7 +26,10 @@ public class CmdHeartbeatHandler extends SocketDataHandler {
 	@Override
 	public SocketCommand socketCommandHandle(SocketCommand sc, Device device) {
 		if (sc.getCommand() == this.getCmdType()) {
-
+			SocketCommand rep = new SocketCommand();
+			rep.setCommand(SocketCommand.CMD_HEARTBEAT_REP);
+			rep.setDataLen(0);
+			return rep;
 		} else if (nextHandler != null) {
 			return nextHandler.socketCommandHandle(sc, device);
 		}

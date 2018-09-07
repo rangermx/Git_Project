@@ -37,7 +37,7 @@ public class SocketOperate extends Thread {
 	private static CmdCommuncateHandler CMH;
 	private static CmdControlHandler CCH;
 	private static DeviceDao SocketDeviceDao;
-	
+
 	private static final int KEEP_ONLINE_TIME = 30;
 
 	private Socket socket;
@@ -45,9 +45,9 @@ public class SocketOperate extends Thread {
 	private Device device;
 
 	private Thread readThread;
-	
+
 	private int timeCount = 0;
-	
+
 	private LinkedList<byte[]> cmdList = new LinkedList<>();
 
 	static {
@@ -108,7 +108,7 @@ public class SocketOperate extends Thread {
 			byte[] temp;
 			SocketState conversion;
 			while (!socket.isClosed()) {
-				
+
 				while (!cmdList.isEmpty()) {
 					temp = cmdList.getFirst();
 					if (temp != null) {

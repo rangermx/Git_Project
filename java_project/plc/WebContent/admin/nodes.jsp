@@ -43,7 +43,7 @@
 						<td>${node.light2PowerPercent }</td>
 						<td>${node.power }W</td>
 						<td><a href="javascript:;" onclick="nodeControl('${pageContext.request.contextPath }/nodeFormServlet', ${node.id })">单灯控制</a></td>
-						<td><a>刷新</a></td>
+						<td><a href="javascript:;" onclick="nodeRefresh('${pageContext.request.contextPath }/nodeRefreshServlet?nodeid=${node.id }')">刷新</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>

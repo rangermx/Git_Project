@@ -3,8 +3,11 @@ package com.waho.socket.state.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.waho.dao.UserMessageDao;
+import com.waho.dao.impl.UserMessageDaoImpl;
 import com.waho.domain.Device;
 import com.waho.domain.SocketCommand;
+import com.waho.domain.UserMessage;
 import com.waho.socket.state.SocketState;
 import com.waho.socket.util.SocketDataHandler;
 
@@ -47,8 +50,21 @@ public class IdleState implements SocketState {
 	@Override
 	public void userMsgHanle(Device device, OutputStream out) {
 		// 1、取出最后一条未执行的用户操作指令
-		// 2、封包发送
-		// 3、将指令状态置为已经执行，写回到数据库
+		UserMessageDao umDao = new UserMessageDaoImpl();
+		try {
+			UserMessage um = umDao.selectUserLastUserMessageByDevice(device);
+			// 2、封包发送
+			if (um != null && !um.isExecuted()) {
+				out.write(um.getData());
+				// 3、将指令状态置为已经执行，写回到数据库
+				um.setExecuted(true);
+				umDao.updateUserMessage(um);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

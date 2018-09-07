@@ -64,6 +64,20 @@ public class SocketCommand {
 		return sb.toString();
 	}
 	
+	public static String parseBytesToHexString(byte[] bytes, int start, int length) {
+		StringBuffer sb = new StringBuffer();
+		String temp;
+		for (int i = start; i < start + length; i++) {
+			temp = Integer.toHexString(bytes[i] & 0xFF);
+			if (temp.length() == 1) {
+				sb.append("0" + temp);
+			} else if (temp.length() == 2) {
+				sb.append(temp);
+			}
+		}
+		return sb.toString();
+	}
+	
 	public static byte[] parseHexStringToBytes(String hexString) {
 		byte[] bytes = new byte[hexString.length() / 2];
 		for (int i = 0; i < bytes.length; i++) {

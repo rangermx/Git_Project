@@ -100,5 +100,13 @@ public class Node {
 	public void setPower(int power) {
 		this.power = power;
 	}
+	@Override
+	public String toString() {
+		return "Node [id=" + id + ", deviceid=" + deviceid + ", deviceMac=" + deviceMac + ", nodeAddr=" + nodeAddr
+				+ ", nodeName=" + nodeName + ", light1State=" + light1State + ", light2State=" + light2State
+				+ ", light1PowerPercent=" + light1PowerPercent + ", light2PowerPercent=" + light2PowerPercent
+				+ ", power=" + power + ", signal=" + signal + ", relayLevel=" + relayLevel + ", agreement=" + agreement
+				+ ", Phase=" + Phase + "]";
+	}
 	
 }

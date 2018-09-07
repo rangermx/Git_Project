@@ -45,4 +45,10 @@ public interface UserService {
 	 */
 	public void userWriteBroadcastCmd(int deviceid, String light1State, String light2State, String light1PowerPercent,
 			String light2PowerPercent);
+	
+	/**
+	 * 用户手动刷新节点状态信息
+	 * @param nodeid
+	 */
+	public void refreshNodeDataById(int nodeid);
 }

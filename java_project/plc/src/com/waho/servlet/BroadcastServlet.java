@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.waho.service.UserService;
+import com.waho.service.impl.UserServiceImpl;
+
 /**
  * 接受用户提交的广播控制指令
  */
@@ -40,9 +43,13 @@ public class BroadcastServlet extends HttpServlet {
 				deviceid + " " + light1State + " " + light2State + " " + light1PowerPercent + " " + light2PowerPercent);
 		if (deviceid != null) {// 数据有效
 			// 调用业务逻辑
+			UserService us = new UserServiceImpl();
+			us.userWriteBroadcastCmd(Integer.parseInt(deviceid), light1State, light2State, light1PowerPercent, light2PowerPercent);
+			response.getWriter().write("提交完成!");
+			return;
 		}
 		// 分发转向
-		response.getWriter().write("提交完成!");
+		response.getWriter().write("提交失败!");
 	}
 
 	/**

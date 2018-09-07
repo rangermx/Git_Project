@@ -25,5 +25,12 @@ public interface UserMessageDao {
 	 * @throws Exception
 	 */
 	public int insertUserMessage(UserMessage um) throws Exception;
+
+	/**
+	 * 根据集控器查找最后一条已执行的广播指令
+	 * @param device
+	 * @return
+	 */
+	public UserMessage selectLastExecutedBroadcastUserMessageByDevice(Device device) throws Exception;
 	
 }

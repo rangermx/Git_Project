@@ -14,6 +14,7 @@ import com.waho.dao.impl.UserDaoImpl;
 import com.waho.dao.impl.UserMessageDaoImpl;
 import com.waho.domain.Device;
 import com.waho.domain.Node;
+import com.waho.domain.SocketCommand;
 import com.waho.domain.User;
 import com.waho.domain.UserMessage;
 import com.waho.service.UserService;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService {
 			// 1、将指令信息封装成指令对象
 			um.setData(Protocol645Handler.GenerateNodeControl645Cmd(node.getNodeAddr(), light1State, light2State,
 					light1PowerPercent, light2PowerPercent));
-			um.setDataLen((byte)um.getData().length);
+			um.setDataLen((byte) um.getData().length);
 			// 2、写入数据库
 			userMDao.insertUserMessage(um);
 		} catch (Exception e) {
@@ -86,7 +87,53 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void userWriteBroadcastCmd(int deviceid, String light1State, String light2State, String light1PowerPercent,
 			String light2PowerPercent) {
-		// TODO Auto-generated method stub
+		DeviceDao deviceDao = new DeviceDaoImpl();
+		UserMessageDao userMDao = new UserMessageDaoImpl();
+		try {
+			Device device = deviceDao.selectDeviceById(deviceid);
+			UserMessage um = new UserMessage();
+			um.setUserid(device.getUserid());
+			um.setDeviceMac(device.getDeviceMac());
+			um.setExecuted(false);
+			um.setCommand(UserMessage.CMD_BROADCAST);
+			// 1、将指令信息封装成指令对象
+			um.setData(Protocol645Handler.GenerateBroadcastControl645Cmd(light1State, light2State, light1PowerPercent,
+					light2PowerPercent));
+			um.setDataLen((byte) um.getData().length);
+			// 2、写入数据库
+			userMDao.insertUserMessage(um);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void refreshNodeDataById(int nodeid) {
+		// 查询节点信息，获取集控器mac地址，拼接查询指令，写入数据库
+		NodeDao nodeDao = new NodeDaoImpl();
+		try {
+			Node node = nodeDao.selectNodeById(nodeid);
+			if (node != null) {
+				DeviceDao deviceDao = new DeviceDaoImpl();
+				Device device = deviceDao.selectDeviceById(node.getDeviceid());
+				if (device != null) {
+					UserMessage um = new UserMessage();
+					um.setCommand(SocketCommand.CMD_COMMUNCATE);
+					um.setDeviceMac(device.getDeviceMac());
+					um.setUserid(device.getUserid());
+					um.setExecuted(false);
+					um.setData(Protocol645Handler.GenerateNodeRefresh645Cmd(node.getNodeAddr()));
+					if (um.getData() != null) {
+						um.setDataLen(um.getData().length);
+					}
+					UserMessageDao umDao = new UserMessageDaoImpl();
+					umDao.insertUserMessage(um);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
