@@ -34,7 +34,7 @@ public class CmdCommuncateHandler extends SocketDataHandler {
 			if (node != null) {
 				NodeDao nodeDao = new NodeDaoImpl();
 				try {
-					nodeDao.updateNodeStateAndPower(node);
+					nodeDao.updateNodeStateAndPowerByNodeAddr(node);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

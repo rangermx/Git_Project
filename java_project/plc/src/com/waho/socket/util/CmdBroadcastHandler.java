@@ -5,11 +5,13 @@ import com.waho.dao.UserMessageDao;
 import com.waho.dao.impl.NodeDaoImpl;
 import com.waho.dao.impl.UserMessageDaoImpl;
 import com.waho.domain.Device;
+import com.waho.domain.Node;
 import com.waho.domain.SocketCommand;
 import com.waho.domain.UserMessage;
+import com.waho.util.Protocol645Handler;
 
 public class CmdBroadcastHandler extends SocketDataHandler {
-	
+
 	private static volatile CmdBroadcastHandler instance;
 
 	public static CmdBroadcastHandler getInstance(SocketDataHandler nextHandler) {
@@ -38,6 +40,11 @@ public class CmdBroadcastHandler extends SocketDataHandler {
 				if (um != null) {
 					// 将集控器下所有节点信息更新
 					NodeDao nodeDao = new NodeDaoImpl();
+					// 获取指令信息
+					Node cmdMsg = Protocol645Handler.Transform645CmdToNode(um.getData());
+					cmdMsg.setDeviceid(device.getId());
+					// 更新数据
+					nodeDao.updateNodeStateAndPowerByDeviceId(cmdMsg);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

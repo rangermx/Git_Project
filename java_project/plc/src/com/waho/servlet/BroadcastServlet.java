@@ -39,8 +39,6 @@ public class BroadcastServlet extends HttpServlet {
 		String light2State = request.getParameter("light2State");
 		String light1PowerPercent = request.getParameter("light1PowerPercent");
 		String light2PowerPercent = request.getParameter("light2PowerPercent");
-		System.out.println(
-				deviceid + " " + light1State + " " + light2State + " " + light1PowerPercent + " " + light2PowerPercent);
 		if (deviceid != null) {// 数据有效
 			// 调用业务逻辑
 			UserService us = new UserServiceImpl();

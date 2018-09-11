@@ -11,5 +11,6 @@ public interface NodeDao {
 	public int insert(Node node) throws Exception;
 	public int insert(List<Node> list) throws Exception;
 	public int deletNodesByDevice(Device device) throws Exception;
-	public int updateNodeStateAndPower(Node node) throws Exception;
+	public int updateNodeStateAndPowerByNodeAddr(Node node) throws Exception;
+	public int updateNodeStateAndPowerByDeviceId(Node node) throws Exception;
 }

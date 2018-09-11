@@ -94,6 +94,15 @@ public class Protocol645Handler {
 		return buffer;
 	}
 
+	/**
+	 * 生成广播控制指令
+	 * 
+	 * @param light1State
+	 * @param light2State
+	 * @param light1PowerPercent
+	 * @param light2PowerPercent
+	 * @return
+	 */
 	public static byte[] GenerateBroadcastControl645Cmd(String light1State, String light2State,
 			String light1PowerPercent, String light2PowerPercent) {
 		byte[] buffer = new byte[20];
@@ -129,7 +138,14 @@ public class Protocol645Handler {
 		return sum;
 	}
 
+	/**
+	 * 将645指令信息解析封装成节点对象
+	 * 
+	 * @param src
+	 * @return
+	 */
 	public static Node Transform645CmdToNode(byte[] src) {
+		
 		Node result = null;
 		if (src[0] != HEADER || src[src.length - 1] != FOOTER)
 			return null;// 头尾错
@@ -139,6 +155,28 @@ public class Protocol645Handler {
 		byte[] data_flag = new byte[4];
 		System.arraycopy(src, 10, data_flag, 0, 4);
 		switch (src[8]) {
+		case CMD_WRITE_DATA:
+			if (Arrays.equals(WRITE_DOUBLE_STATE, data_flag)) {// 写数据
+				result = new Node();
+				byte temp = (byte) (src[14] - 0x33);
+				if (temp == 0x01) {
+					result.setLight1State(true);
+				} else if (temp == 0x00) {
+					result.setLight1State(false);
+				}
+				temp = (byte) (src[15] - 0x33);
+				result.setLight1PowerPercent(temp & 0xFF);
+
+				temp = (byte) (src[16] - 0x33);
+				if (temp == 0x01) {
+					result.setLight2State(true);
+				} else if (temp == 0x00) {
+					result.setLight2State(false);
+				}
+				temp = (byte) (src[17] - 0x33);
+				result.setLight2PowerPercent(temp & 0xFF);
+			}
+			break;
 		case CMD_READ_DATA_REP:
 			if (Arrays.equals(READ_DOUBLE_STATE, data_flag)) {// 读数据回复
 				byte[] power = new byte[2];
@@ -155,8 +193,8 @@ public class Protocol645Handler {
 					result.setLight1State(false);
 				}
 				temp = (byte) (src[17] - 0x33);
-				result.setLight1PowerPercent(temp&0xFF);
-				
+				result.setLight1PowerPercent(temp & 0xFF);
+
 				temp = (byte) (src[18] - 0x33);
 				if (temp == 0x01) {
 					result.setLight2State(true);
@@ -164,13 +202,34 @@ public class Protocol645Handler {
 					result.setLight2State(false);
 				}
 				temp = (byte) (src[19] - 0x33);
-				result.setLight2PowerPercent(temp&0xFF);
+				result.setLight2PowerPercent(temp & 0xFF);
 			}
 			break;
 		case CMD_WRITE_DATA_REP:
-			if (Arrays.equals(READ_DOUBLE_STATE, data_flag)) {// 写数据回复
-				// 找到最后一条已发送的写数据指令
+			byte[] power = new byte[2];
+			power[0] = (byte) (src[11] - 0x33);
+			power[1] = (byte) (src[10] - 0x33);
+			int powerInt = Integer.parseInt(SocketCommand.parseBytesToHexString(power, 2), 16);
+			result = new Node();
+			result.setNodeAddr(SocketCommand.parseBytesToHexString(src, 1, 6));
+			result.setPower(powerInt);
+			byte temp = (byte) (src[12] - 0x33);
+			if (temp == 0x01) {
+				result.setLight1State(true);
+			} else if (temp == 0x00) {
+				result.setLight1State(false);
 			}
+			temp = (byte) (src[13] - 0x33);
+			result.setLight1PowerPercent(temp & 0xFF);
+
+			temp = (byte) (src[14] - 0x33);
+			if (temp == 0x01) {
+				result.setLight2State(true);
+			} else if (temp == 0x00) {
+				result.setLight2State(false);
+			}
+			temp = (byte) (src[15] - 0x33);
+			result.setLight2PowerPercent(temp & 0xFF);
 			break;
 		default:
 			break;

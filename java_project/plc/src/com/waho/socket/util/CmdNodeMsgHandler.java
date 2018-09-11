@@ -32,10 +32,9 @@ public class CmdNodeMsgHandler extends SocketDataHandler {
 		if (sc.getCommand() == this.getCmdType()) {
 			Node node = Protocol645Handler.Transform645CmdToNode(sc.getData());
 			if (node != null) {
-				System.out.println(node.toString());
 				NodeDao nodeDao = new NodeDaoImpl();
 				try {
-					nodeDao.updateNodeStateAndPower(node);
+					nodeDao.updateNodeStateAndPowerByNodeAddr(node);
 					SocketCommand rep = new SocketCommand();
 					rep.setCommand(SocketCommand.CMD_MAIN_NODE_MSG_REP);
 					rep.setDataLen(0);

@@ -55,7 +55,7 @@ public class IdleState implements SocketState {
 			UserMessage um = umDao.selectUserLastUserMessageByDevice(device);
 			// 2、封包发送
 			if (um != null && !um.isExecuted()) {
-				out.write(um.getData());
+				out.write(um.tobyteArray());
 				// 3、将指令状态置为已经执行，写回到数据库
 				um.setExecuted(true);
 				umDao.updateUserMessage(um);
