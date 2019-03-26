@@ -1,5 +1,6 @@
 #include "state_init.h"
-
+extern StateMachine state_idle;
+extern StateMachine *machine;
 StateMachine state_init;
 
 void state_init_buffer1_data_handle(unsigned char *buf, char len) 
@@ -15,6 +16,7 @@ void state_init_buffer2_data_handle(unsigned char *buf, char len)
 void state_init_GPIO_input()
 {
     // 进行初始化状态下的GPIO输入操作
+    machine = &state_idle;
 }
 
 void state_init_init()

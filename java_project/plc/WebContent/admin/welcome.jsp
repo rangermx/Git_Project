@@ -26,6 +26,7 @@
 					<th>网络状态</th>
 					<th>当前节点数量</th>
 					<th>最大节点数量</th>
+					<th>节点主动注册</th>
 					<th>广播控制</th>
 				</tr>
 			</thead>
@@ -37,6 +38,8 @@
 						<td>${device.online == true ? "online" : "offline" }</td>
 						<td>${device.currentNodes }</td>
 						<td>${device.maxNodes }</td>
+						<td><a href="javascript:;"
+							onclick="nodesRegisterControl('${pageContext.request.contextPath }/nodesRegisterFormServlet', ${device.id })">${device.nodesRegister == true ? "ON" : "OFF" }</a></td>
 						<td><a href="javascript:;"
 							onclick="deviceBroadcastControl('${pageContext.request.contextPath }/broadcastFormServlet', ${device.id })">广播控制</a></td>
 					</tr>

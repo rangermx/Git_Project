@@ -2,9 +2,21 @@ package com.waho.domain;
 
 
 public class User {
+	/**
+	 * 用户id 主键
+	 */
 	private int id;
+	/**
+	 * 用户名
+	 */
 	private String username;
+	/**
+	 * 用户密码
+	 */
 	private String password;
+	/**
+	 * 用户邮箱
+	 */
 	private String email;
 	
 	public int getId() {

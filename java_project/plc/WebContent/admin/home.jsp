@@ -75,7 +75,8 @@
 		<div class="layui-body">
 			<!-- 内容主体区域 -->
 			<div style="padding: 15px;" id="body-div">
-				<iframe style="min-height: 500px" name="fname" frameborder="0" scrolling="no" width="100%"
+				<iframe style="min-height: 500px" name="fname" frameborder="0"
+					scrolling="no" width="100%"
 					src="${pageContext.request.contextPath }/welcomeServlet"
 					class="body-frame"></iframe>
 			</div>

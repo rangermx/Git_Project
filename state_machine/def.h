@@ -13,5 +13,4 @@ typedef struct StateMachine
     void (*buffer2DataHandle)(unsigned char *, char);
     void (*GPIO_input)();
 } StateMachine;
-
 #endif

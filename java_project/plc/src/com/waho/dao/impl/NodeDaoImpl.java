@@ -66,12 +66,12 @@ public class NodeDaoImpl implements NodeDao {
 	}
 
 	@Override
-	public int updateNodeStateAndPowerByNodeAddr(Node node) throws Exception {
+	public int updateNodeStateAndPowerByNodeAddrAndDeviceid(Node node) throws Exception {
 		QueryRunner qr = new QueryRunner(C3P0Utils.getDataSource());
 		return qr.update(
-				"UPDATE nodes SET power=?,light1State=?,light1PowerPercent=?,light2State=?,light2PowerPercent=? WHERE nodeAddr=?",
+				"UPDATE nodes SET power=?,light1State=?,light1PowerPercent=?,light2State=?,light2PowerPercent=? WHERE nodeAddr=? and deviceid=?",
 				node.getPower(), node.isLight1State(), node.getLight1PowerPercent(), node.isLight2State(),
-				node.getLight2PowerPercent(), node.getNodeAddr());
+				node.getLight2PowerPercent(), node.getNodeAddr(), node.getDeviceid());
 	}
 
 	@Override

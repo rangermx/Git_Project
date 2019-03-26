@@ -28,7 +28,7 @@ void stateMachineInit()
 void main()
 {
     stateMachineInit();// 初始化
-    *machine = state_init;// 切换状态
+    machine = &state_init;// 切换状态
     while (1)         // 进入状态机
     {
         // OSTIMEDELAY(); // 任务调度延时

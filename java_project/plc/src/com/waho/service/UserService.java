@@ -1,5 +1,6 @@
 package com.waho.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,4 +52,11 @@ public interface UserService {
 	 * @param nodeid
 	 */
 	public void refreshNodeDataById(int nodeid);
+	/**
+	 * 用户发送开启节点主动注册指令
+	 * @param deviceid
+	 * @param startTime
+	 * @param keepMinutes
+	 */
+	public void userWriteNodesRegisterOpenCmd(int deviceid, Date startTime, int keepMinutes);
 }

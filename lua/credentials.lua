@@ -1,0 +1,2 @@
+SSID = "xiaomi"
+PASSWORD = "12345678"

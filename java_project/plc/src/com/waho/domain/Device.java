@@ -1,16 +1,65 @@
 package com.waho.domain;
 
+import java.util.Date;
+
 public class Device {
 	private int id;
-	private int userid;// 用户id
-	private String deviceMac;// 设备mac地址
-	private String deviceName;// 设备名称
-	private boolean online;// 在线状态
-	private int currentNodes;// 当前从节点数量
-	private int maxNodes;// 最大从节点数量
+	/**
+	 * 用户id
+	 */
+	private int userid;
+	/**
+	 * 设备mac地址
+	 */
+	private String deviceMac;
+	/**
+	 * 设备名称
+	 */
+	private String deviceName;
+	/**
+	 * 在线状态
+	 */
+	private boolean online;
+	/**
+	 * 当前从节点数量
+	 */
+	private int currentNodes;
+	/**
+	 * 最大从节点数量
+	 */
+	private int maxNodes;
+	/**
+	 * 是否允许节点主动注册
+	 */
+	private boolean nodesRegister = false;
+	/**
+	 * 允许节点主动注册时间长度
+	 */
+	private int registerMinutes;
+	/**
+	 * 允许节点主动注册开启时间点
+	 */
+	private Date registDate;
 	
 	
-	
+	public boolean isNodesRegister() {
+		return nodesRegister;
+	}
+	public void setNodesRegister(boolean nodesRegister) {
+		this.nodesRegister = nodesRegister;
+	}
+	public int getRegisterMinutes() {
+		return registerMinutes;
+	}
+	public void setRegisterMinutes(int registerMinutes) {
+		this.registerMinutes = registerMinutes;
+	}
+	public Date getRegistDate() {
+		return registDate;
+	}
+	public void setRegistDate(Date registDate) {
+		this.registDate = registDate;
+	}
 	public String getDeviceName() {
 		return deviceName;
 	}

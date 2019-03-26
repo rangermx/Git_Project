@@ -17,9 +17,9 @@ public class MyTest {
 			UserMessage um = dao.selectUserLastUserMessageByDevice(device);
 			System.out.println(um);
 			System.out.println(um.getCommand());
-			System.out.println(um.getDataLen());
+			System.out.println(um.getLen());
 			int v = 0;
-			for (int i = 0; i < um.getDataLen(); i++) {
+			for (int i = 0; i < um.getLen() - 9; i++) {
 				v = um.getData()[i] & 0xFF;
 				System.out.print("0x" + Integer.toHexString(v) + " ");
 			}

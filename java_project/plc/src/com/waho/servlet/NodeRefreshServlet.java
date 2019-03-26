@@ -11,7 +11,7 @@ import com.waho.service.UserService;
 import com.waho.service.impl.UserServiceImpl;
 
 /**
- * Servlet implementation class NodeRefreshServlet
+ * 接受用户点击刷新的请求，发送查询节点信息指令，返回成功
  */
 @WebServlet("/nodeRefreshServlet")
 public class NodeRefreshServlet extends HttpServlet {

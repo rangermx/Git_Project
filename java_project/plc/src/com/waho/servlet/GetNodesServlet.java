@@ -44,6 +44,7 @@ public class GetNodesServlet extends HttpServlet {
 			UserService userService = new UserServiceImpl();
 			List<Node> list = userService.getNodesByDeviceid(deviceid);
 			request.setAttribute("nodes", list);
+			request.setAttribute("deviceid", deviceid);
 			// 分发转向
 			request.getRequestDispatcher("/admin/nodes.jsp").forward(request, response);
 		}

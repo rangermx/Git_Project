@@ -1,5 +1,6 @@
 package com.waho.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import com.waho.domain.SocketCommand;
 import com.waho.domain.User;
 import com.waho.domain.UserMessage;
 import com.waho.service.UserService;
+import com.waho.util.Protocol3762Handler;
 import com.waho.util.Protocol645Handler;
 
 public class UserServiceImpl implements UserService {
@@ -70,11 +72,15 @@ public class UserServiceImpl implements UserService {
 			um.setUserid(device.getUserid());
 			um.setDeviceMac(device.getDeviceMac());
 			um.setExecuted(false);
-			um.setCommand(UserMessage.CMD_COMMUNCATE);
+			um.setCommand(UserMessage.CMD_WRITE_NODE_STATE);
 			// 1、将指令信息封装成指令对象
-			um.setData(Protocol645Handler.GenerateNodeControl645Cmd(node.getNodeAddr(), light1State, light2State,
+			um.setData(SocketCommand.GenerateWriteNodeStateCommandData(node.getNodeAddr(), light1State, light2State,
 					light1PowerPercent, light2PowerPercent));
-			um.setDataLen((byte) um.getData().length);
+//			if (um.getData() != null) {
+//				um.setLen((byte) um.getData().length + SocketCommand.LENGTH_WITHOUT_DATA);
+//			} else {
+//				um.setLen(SocketCommand.LENGTH_WITHOUT_DATA);
+//			}
 			// 2、写入数据库
 			userMDao.insertUserMessage(um);
 		} catch (Exception e) {
@@ -95,11 +101,15 @@ public class UserServiceImpl implements UserService {
 			um.setUserid(device.getUserid());
 			um.setDeviceMac(device.getDeviceMac());
 			um.setExecuted(false);
-			um.setCommand(UserMessage.CMD_BROADCAST);
+			um.setCommand(UserMessage.CMD_BROADCAST_WRITE_STATE);
 			// 1、将指令信息封装成指令对象
-			um.setData(Protocol645Handler.GenerateBroadcastControl645Cmd(light1State, light2State, light1PowerPercent,
+			um.setData(SocketCommand.GenerateBroadcastWriteStateCommandData(light1State, light2State, light1PowerPercent,
 					light2PowerPercent));
-			um.setDataLen((byte) um.getData().length);
+//			if (um.getData() != null) {
+//				um.setLen((byte) um.getData().length + SocketCommand.LENGTH_WITHOUT_DATA);
+//			} else {
+//				um.setLen(SocketCommand.LENGTH_WITHOUT_DATA);
+//			}
 			// 2、写入数据库
 			userMDao.insertUserMessage(um);
 		} catch (Exception e) {
@@ -119,14 +129,16 @@ public class UserServiceImpl implements UserService {
 				Device device = deviceDao.selectDeviceById(node.getDeviceid());
 				if (device != null) {
 					UserMessage um = new UserMessage();
-					um.setCommand(SocketCommand.CMD_COMMUNCATE);
+					um.setCommand(SocketCommand.CMD_READ_NODE_STATE);
 					um.setDeviceMac(device.getDeviceMac());
 					um.setUserid(device.getUserid());
 					um.setExecuted(false);
-					um.setData(Protocol645Handler.GenerateNodeRefresh645Cmd(node.getNodeAddr()));
-					if (um.getData() != null) {
-						um.setDataLen(um.getData().length);
-					}
+					um.setData(SocketCommand.GenerateReadNodeStateCommandData(node.getNodeAddr()));
+//					if (um.getData() != null) {
+//						um.setLen((byte) um.getData().length + SocketCommand.LENGTH_WITHOUT_DATA);
+//					} else {
+//						um.setLen(SocketCommand.LENGTH_WITHOUT_DATA);
+//					}
 					UserMessageDao umDao = new UserMessageDaoImpl();
 					umDao.insertUserMessage(um);
 				}
@@ -135,6 +147,34 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void userWriteNodesRegisterOpenCmd(int deviceid, Date startTime, int keepMinutes) {
+		// TODO Auto-generated method stub
+		DeviceDao deviceDao = new DeviceDaoImpl();
+		UserMessageDao userMDao = new UserMessageDaoImpl();
+		try {
+			Device device = deviceDao.selectDeviceById(deviceid);
+			UserMessage um = new UserMessage();
+			um.setUserid(device.getUserid());
+			um.setDeviceMac(device.getDeviceMac());
+			um.setExecuted(false);
+			um.setCommand(UserMessage.CMD_NODE_REG_OPEN);
+			// 1、将指令信息封装成指令对象
+			um.setData(SocketCommand.GenerateNodesRegisterOpenCommandData(startTime, keepMinutes));
+//			if (um.getData() != null) {
+//				um.setLen((byte) um.getData().length + SocketCommand.LENGTH_WITHOUT_DATA);
+//			} else {
+//				um.setLen(SocketCommand.LENGTH_WITHOUT_DATA);
+//			}
+//			um.setInfoDomain(SocketCommand.parseBytesToHexString(Protocol3762Handler.getInfoDomain(um.getData()), 6));
+			// 2、写入数据库
+			userMDao.insertUserMessage(um);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

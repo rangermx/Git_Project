@@ -8,10 +8,22 @@ import com.waho.domain.Device;
 import com.waho.domain.SocketCommand;
 import com.waho.domain.UserMessage;
 
+/**
+ * 责任链设计模式接口
+ * 所有指令处理工具类应实现该接口
+ * @author mingxin
+ *
+ */
 public abstract class SocketDataHandler {
 
+	/**
+	 * 指令信息与该工具处理的指令不相同时，跳转到下一个工具类
+	 */
 	public SocketDataHandler nextHandler;
 
+	/**
+	 * 处理的信息类型
+	 */
 	private byte cmdType;
 
 	public SocketDataHandler getNextHandler() {
@@ -32,9 +44,9 @@ public abstract class SocketDataHandler {
 	 * @return bytes 如果指令解析完成后，根据交互逻辑判断，需要回复集控器，则返回回复数据
 	 */
 	public SocketCommand socketDataHandle(byte[] bytes, int len, Device device) {
-		
+
 		SocketCommand sc = SocketCommand.parseSocketCommand(bytes, len);
-		
+
 		if (sc != null) {// 数据有效
 			return this.socketCommandHandle(sc, device);
 		}
@@ -50,6 +62,11 @@ public abstract class SocketDataHandler {
 	 */
 	public abstract SocketCommand socketCommandHandle(SocketCommand sc, Device device);
 
+	/**
+	 * 处理用户下发给集控器的指令
+	 * @param device 集控器信息
+	 * @param out 集控器绑定的socket输出流
+	 */
 	public static void UserMessageHandle(Device device, OutputStream out) {
 		UserMessageDao dao = new UserMessageDaoImpl();
 		// 1、从数据库读最后一条用户指令
@@ -82,6 +99,5 @@ public abstract class SocketDataHandler {
 	public void setCmdType(byte cmdType) {
 		this.cmdType = cmdType;
 	}
-	
-	
+
 }

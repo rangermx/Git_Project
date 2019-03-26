@@ -2,18 +2,57 @@ package com.waho.domain;
 
 public class Node {
 	private int id;
+	/**
+	 * 节点连接的集控器的id
+	 */
 	private int deviceid;
+	/**
+	 * 节点连接的集控器的mac地址
+	 */
 	private String deviceMac;
+	/**
+	 * 节点在电力线载波网络中的地址
+	 */
 	private String nodeAddr;
+	/**
+	 * 节点名称
+	 */
 	private String nodeName;
+	/**
+	 * 主灯状态
+	 */
 	private boolean light1State;
+	/**
+	 * 辅灯状态
+	 */
 	private boolean light2State;
+	/**
+	 * 主灯功率百分比
+	 */
 	private int light1PowerPercent;
+	/**
+	 * 辅灯功率百分比
+	 */
 	private int light2PowerPercent;
+	/**
+	 * 总功率
+	 */
 	private int power;
+	/**
+	 * 侦听信号品质
+	 */
 	private int signal;
+	/**
+	 * 中继级别
+	 */
 	private int relayLevel;
+	/**
+	 * 协议类型
+	 */
 	private int agreement;
+	/**
+	 * 相位
+	 */
 	private int Phase;
 	
 	public int getSignal() {

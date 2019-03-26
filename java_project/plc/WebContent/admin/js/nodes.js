@@ -15,7 +15,7 @@ function getXMLHttpRequest() {
  * 
  * @returns
  */
-function AJAXRequest(url, func) {
+function AJAXRefreshRequest(url, func) {
 	var req = getXMLHttpRequest();
 	req.onreadystatechange = function() {
 		if (req.readyState == 4) {// 请求成功
@@ -30,14 +30,14 @@ function AJAXRequest(url, func) {
 /**
  * 单灯控制方法
  */
-function nodeControl(url, nodeid) {
+function nodeControl(url, nodeid, light1State, light1PowerPercent, light2State, light2PowerPercent) {
 	layui.use('layer', function() {
 		var layer = layui.layer;
 		layer.open({
 			area : [ 'auto', '350px' ],
 			btnAlign : 'c',
 			resize : false,
-			content : url + "?nodeid=" + nodeid,
+			content : url + "?nodeid=" + nodeid + "&light1State=" + light1State + "&light1PowerPercent=" + light1PowerPercent + "&light2State=" + light2State + "&light2PowerPercent=" + light2PowerPercent,
 			closeBtn : 1,
 			type : 2,
 			btn : '关闭',
@@ -62,7 +62,7 @@ function nodeControl(url, nodeid) {
  */
 function nodeRefresh(url) {
 	// ajax请求servlet，在响应成功回调函数中调用layui透明弹窗，刷新指令发送成功
-	AJAXRequest(url, function(req) {
+	AJAXRefreshRequest(url, function(req) {
 		layui.use('layer', function() {
 			var layer = layui.layer;
 			layer.msg(req.responseText, {

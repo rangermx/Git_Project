@@ -282,6 +282,7 @@ public class SocketOperate extends Thread {
 								if (zb != null) {
 									zb.setZigbeeSaddr(strXML.substring(26, 30));// 节点短地址
 									zb.setZigbeeNet(1);// 节点网络状态(上线)
+									zb.setDevMac(deviceSocket.getDevice().getDevMac());
 									SocketTool.updateZigbeeByPrimaryKeySelective(zb);// 更新数据库
 								} else {
 									zb = new Zigbee();

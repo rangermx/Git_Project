@@ -1,8 +1,15 @@
 package com.waho.socket.util;
 
+import com.waho.dao.DeviceDao;
+import com.waho.dao.impl.DeviceDaoImpl;
 import com.waho.domain.Device;
 import com.waho.domain.SocketCommand;
 
+/**
+ * 接受到心跳包以后的处理
+ * @author mingxin
+ *
+ */
 public class CmdHeartbeatHandler extends SocketDataHandler {
 
 	private static volatile CmdHeartbeatHandler instance;
@@ -28,7 +35,21 @@ public class CmdHeartbeatHandler extends SocketDataHandler {
 		if (sc.getCommand() == this.getCmdType()) {
 			SocketCommand rep = new SocketCommand();
 			rep.setCommand(SocketCommand.CMD_HEARTBEAT_REP);
-			rep.setDataLen(0);
+//			rep.setLen(SocketCommand.LENGTH_WITHOUT_DATA);
+			if (device != null && device.getDeviceMac() != null) {
+				DeviceDao deviceDao = new DeviceDaoImpl();
+				Device temp;
+				try {
+					temp = deviceDao.selectDeviceByDeviceMac(device.getDeviceMac());
+					if (temp.isOnline() == false) {
+						temp.setOnline(true);
+						deviceDao.updateDeviceOnline(temp);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			return rep;
 		} else if (nextHandler != null) {
 			return nextHandler.socketCommandHandle(sc, device);

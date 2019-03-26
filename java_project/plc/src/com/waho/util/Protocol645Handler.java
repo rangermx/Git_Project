@@ -27,8 +27,11 @@ public class Protocol645Handler {
 	 * @return
 	 */
 	public static byte[] GenerateBroadcastWriteAddr645Cmd(String nodeAddr) {
-		// byte[] buffer = new byte[20];
-
+//		byte[] buffer = new byte[20];
+//		buffer[0] = HEADER;
+//		byte[] addr = SocketCommand.parseHexStringToBytes(nodeAddr);
+//		System.arraycopy(addr, 0, buffer, 1, 6);
+//		buffer[7] = HEADER;
 		return null;
 	}
 

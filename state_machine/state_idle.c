@@ -1,5 +1,7 @@
 #include "state_idle.h"
 
+extern StateMachine state_unusual;
+extern StateMachine *machine;
 StateMachine state_idle;
 
 void state_idle_buffer1_data_handle(unsigned char *buf, char len)
@@ -15,6 +17,7 @@ void state_idle_buffer2_data_handle(unsigned char *buf, char len)
 void state_idle_GPIO_input()
 {
     // 进行空闲状态下的GPIO输入操作
+    machine = &state_unusual;
 }
 
 void state_idle_init()
